@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Seek Marketing | Smart Call Flow + Objection Toolkit</title>
+    <title>Seek Marketing | Complete Call Flow + Rebooking & Reconfirmation</title>
     <style>
         * {
             margin: 0;
@@ -12,159 +12,99 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f4f8ff 0%, #e9f0f7 100%);
+            background: linear-gradient(135deg, #f5f7fc 0%, #eef2f8 100%);
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             padding: 1.5rem;
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 1200px;
+        .main-wrapper {
+            max-width: 1300px;
             margin: 0 auto;
+            width: 100%;
         }
 
-        /* Header with brand */
-        .header {
+        /* Global Header */
+        .global-header {
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .header h1 {
-            font-size: 1.9rem;
+        .global-header h1 {
+            font-size: 2rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #0b2b3b, #1e5a7a);
+            background: linear-gradient(135deg, #1A2A3F, #2C4C6E);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.5px;
         }
 
-        .header p {
-            color: #4b6a82;
+        .global-header p {
+            color: #5a6e84;
             margin-top: 0.3rem;
-            font-weight: 450;
         }
 
-        /* Flow Steps - improved cards */
-        .flow-container {
+        /* Tab Navigation - Centralized */
+        .tabs-nav {
             display: flex;
-            flex-direction: column;
             gap: 1rem;
-        }
-
-        .flow-step {
-            background: white;
-            border-radius: 1.75rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
-            transition: all 0.25s ease;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-        }
-
-        .flow-step.active {
-            box-shadow: 0 16px 32px -12px rgba(0, 32, 64, 0.2);
-            border-left: 5px solid #2c7cb6;
-            transform: translateX(4px);
-            background: #ffffff;
-        }
-
-        .step-header {
-            padding: 1.25rem 1.6rem;
-            background: #ffffff;
-            border-radius: 1.75rem 1.75rem 0 0;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            border-bottom: 1px solid #eef2f8;
-            transition: background 0.15s;
-        }
-
-        .step-header:hover {
-            background: #fbfdff;
-        }
-
-        .step-number {
-            width: 40px;
-            height: 40px;
-            background: #ecf3fa;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-weight: 800;
-            color: #1f6390;
-            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
-        .flow-step.active .step-number {
-            background: #2c7cb6;
+        .tab-btn {
+            background: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            color: #2c556e;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #cfdfed;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .tab-btn.active {
+            background: #2c6e9e;
             color: white;
-            box-shadow: 0 4px 8px rgba(44,124,182,0.2);
+            border-color: #2c6e9e;
+            box-shadow: 0 8px 18px rgba(44,110,158,0.2);
         }
 
-        .step-title {
-            flex: 1;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #153e54;
-            letter-spacing: -0.2px;
+        .tab-btn:hover:not(.active) {
+            background: #f0f5fc;
+            transform: translateY(-2px);
         }
 
-        .step-badge {
-            font-size: 0.7rem;
-            background: #eef2ff;
-            padding: 5px 12px;
-            border-radius: 40px;
-            color: #2c7cb6;
-            font-weight: 500;
-        }
-
-        .step-content {
-            padding: 1.6rem;
+        /* Tab Content */
+        .tab-pane {
             display: none;
+            animation: fadeIn 0.25s ease;
         }
 
-        .flow-step.active .step-content {
+        .tab-pane.active-pane {
             display: block;
-            animation: fadeInContent 0.2s ease;
         }
 
-        @keyframes fadeInContent {
-            from { opacity: 0; transform: translateY(-5px);}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px);}
             to { opacity: 1; transform: translateY(0);}
         }
 
-        /* Script Boxes - enhanced */
-        .script-box {
-            background: #fefefe;
-            border-radius: 1.25rem;
-            padding: 1.2rem 1.3rem;
-            line-height: 1.65;
-            font-size: 0.95rem;
-            color: #1e3b4f;
-            border: 1px solid #e2e9f2;
-            white-space: pre-wrap;
-            word-break: break-word;
-            margin-bottom: 1rem;
-            transition: 0.1s;
-            font-weight: 450;
-            box-shadow: inset 0 0 0 0 #fff6e0, 0 1px 2px rgba(0,0,0,0.02);
-        }
-
-        .script-box[contenteditable="true"] {
-            background: #fffbf0;
-            border: 1px solid #f7bc5a;
-            box-shadow: 0 0 0 2px rgba(247,188,90,0.2);
-            outline: none;
-        }
-
-        /* Buttons */
-        .button-row {
+        /* Global action bar */
+        .global-actions {
             display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 0.75rem;
-            align-items: center;
         }
 
         .btn {
@@ -175,73 +115,130 @@
             font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.2s;
+            background: #f0f4fa;
+            color: #2c5c7c;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: #f0f4fa;
-            color: #2b5c7c;
+            gap: 6px;
         }
 
         .btn-primary {
-            background: #2c7cb6;
+            background: #2c6e9e;
             color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .btn-primary:hover {
-            background: #1f6390;
+            background: #1f567e;
             transform: translateY(-1px);
         }
 
         .btn-outline {
             background: white;
-            border: 1px solid #cfdeed;
+            border: 1px solid #dce3ec;
         }
 
         .btn-outline:hover {
-            background: #f2f7ff;
-            border-color: #9bb7d0;
+            background: #f5f8fe;
         }
 
         .btn-sm {
-            padding: 6px 16px;
+            padding: 6px 14px;
             font-size: 0.75rem;
         }
 
-        .btn-edit {
-            background: transparent;
-            color: #54708f;
-            border: 1px solid #dce5f0;
+        /* Card Style (shared) */
+        .script-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            margin-bottom: 1.8rem;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .btn-edit:hover {
-            background: #eef3fc;
-            color: #2c7cb6;
+        .script-header {
+            padding: 1.2rem 1.8rem;
+            background: #fafcff;
+            border-bottom: 1px solid #eff3f8;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
         }
 
-        /* Objections area - fresh design */
-        .objections-area {
-            margin-top: 1.25rem;
-            background: #fffbf5;
-            border-radius: 1.3rem;
-            padding: 1rem;
-            border-left: 4px solid #f0b34b;
-            transition: 0.1s;
-        }
-
-        .objections-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
-            font-weight: 800;
-            color: #c2812a;
-            margin-bottom: 0.9rem;
+        .script-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e2f3e;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .objection-chip {
+        .badge {
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #2c6e9e;
+        }
+
+        .script-body {
+            padding: 1.5rem;
+        }
+
+        .script-text {
+            background: #f8fafd;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: #1a2c3c;
+            border: 1px solid #e9edf2;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-bottom: 1rem;
+            font-family: 'Inter', system-ui, monospace;
+        }
+
+        .script-text[contenteditable="true"] {
+            background: #fff9e8;
+            border: 1px solid #ffcf7a;
+            outline: none;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        /* Hesitation / Objections area (unified) */
+        .hesitation-area {
+            background: #fef9f0;
+            border-radius: 1.2rem;
+            padding: 1rem 1.2rem;
+            margin-top: 1.2rem;
+            border-left: 4px solid #f5b042;
+        }
+
+        .hesitation-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: #b86f1c;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hesitation-chip {
             background: white;
             border-radius: 40px;
             padding: 8px 16px;
@@ -250,115 +247,58 @@
             align-items: center;
             gap: 8px;
             font-size: 0.8rem;
-            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            border: 1px solid #ffe2bb;
+            border: 1px solid #ffe0b5;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
 
-        .objection-chip:hover {
-            background: #fff1e2;
+        .hesitation-chip:hover {
+            background: #fff3e0;
             transform: scale(1.02);
-            border-color: #e19b34;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-color: #f5a623;
         }
 
-        .objection-reply {
+        .dynamic-reply {
             background: white;
-            border-radius: 1.1rem;
-            padding: 1rem 1.2rem;
-            margin-top: 0.9rem;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 0.8rem;
             font-size: 0.88rem;
             line-height: 1.5;
-            color: #1f553a;
-            border-left: 3px solid #f0b34b;
+            color: #2c4a2f;
+            border-left: 3px solid #f5a623;
             display: none;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
-        .objection-reply.show {
+        .dynamic-reply.show-reply {
             display: block;
             animation: fadeSlide 0.2s ease;
         }
 
         @keyframes fadeSlide {
-            from { opacity: 0; transform: translateY(-6px); }
+            from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .edit-reply-btn {
-            background: transparent;
-            border: none;
-            font-size: 0.7rem;
-            color: #c2812a;
-            cursor: pointer;
-            margin-left: 12px;
-            font-weight: 500;
-        }
-
-        .edit-reply-btn:hover {
-            text-decoration: underline;
-        }
-
-        /* Navigation pills */
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2.2rem;
-            gap: 1rem;
-        }
-
-        .nav-btn {
-            flex: 1;
-            text-align: center;
-            background: white;
-            border: 1px solid #d0dfee;
-            padding: 12px;
-            border-radius: 60px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #235e7e;
-        }
-
-        .nav-btn:hover {
-            background: #eef3fc;
-            transform: translateY(-2px);
-            border-color: #b9cee6;
-        }
-
-        /* Global action bar */
-        .global-bar {
-            display: flex;
-            justify-content: flex-end;
-            gap: 14px;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
         /* Toast */
-        .toast {
+        .toast-msg {
             position: fixed;
-            bottom: 28px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1f2f3b;
-            backdrop-filter: blur(4px);
-            background: #1e2f3cee;
+            background: #1e2a36;
             color: white;
-            padding: 12px 28px;
+            padding: 10px 24px;
             border-radius: 60px;
             font-size: 0.85rem;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: 0.2s;
             pointer-events: none;
             z-index: 1000;
-            font-weight: 500;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        .toast.show {
+        .toast-msg.show {
             opacity: 1;
         }
 
@@ -366,267 +306,272 @@
             body {
                 padding: 1rem;
             }
-            .step-header {
+            .script-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .script-body {
                 padding: 1rem;
             }
-            .step-content {
-                padding: 1.2rem;
+            .tab-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.85rem;
             }
-            .step-title {
-                font-size: 1rem;
-            }
-            .btn {
-                padding: 6px 14px;
-            }
-        }
-
-        /* extra utility */
-        .badge-edit-hint {
-            font-size: 0.7rem;
-            color: #7893ab;
-            margin-left: 6px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="global-bar">
-        <button class="btn btn-outline btn-sm" id="saveAllBtn"><span>💾</span> Save all changes</button>
-        <button class="btn btn-outline btn-sm" id="resetBtn"><span>⟳</span> Reset defaults</button>
-        <button class="btn btn-outline btn-sm" id="exportBtn"><span>📋</span> Export scripts</button>
+<div class="main-wrapper">
+    <div class="global-header">
+        <h1>📞 Seek Marketing Partners · Complete Script Studio</h1>
+        <p>Main Flow | Rebooking + Reconfirmation — centralized & responsive</p>
     </div>
 
-    <div class="header">
-        <h1>📞 Seek Marketing · Dynamic Call Flow</h1>
-        <p>Click any step to navigate · Double‑click objection replies to edit · Quick‑save everything</p>
+    <!-- Tab Navigation -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="mainflow">🎯 Main Call Flow</button>
+        <button class="tab-btn" data-tab="rebooking">🔄 Rebooking Script</button>
+        <button class="tab-btn" data-tab="reconfirmation">✅ Reconfirmation Script</button>
     </div>
 
-    <div class="flow-container" id="flowContainer">
-        <!-- Step 0: Opening / Hook -->
-        <div class="flow-step" data-step="0">
-            <div class="step-header">
-                <div class="step-number">1</div>
-                <div class="step-title">Opening / Hook</div>
-                <div class="step-badge">🎯 first impression</div>
-            </div>
-            <div class="step-content">
-                <div class="script-box" id="hookScript">Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a look at your company profile and had a couple of quick questions… Do you have a minute?\n\n(Pause — let them respond)\n\n“Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could boost website traffic and ROI.”</div>
-                <div class="button-row">
-                    <button class="btn btn-edit edit-script" data-target="hookScript"><span>✏️</span> Edit script</button>
-                </div>
-                <div class="objections-area">
-                    <div class="objections-title">💬 Quick objections — click to show reply</div>
-                    <div class="objection-chip" data-reply="hook-reply1">"Not interested / Too busy"</div>
-                    <div class="objection-chip" data-reply="hook-reply2">"Is this a sales call?"</div>
-                    <div class="objection-reply" id="hook-reply1">I totally get it — I'll be super brief. I spotted a couple of quick opportunities that could boost your visibility without taking much time. If in 60 seconds it's not relevant, feel free to say so — fair enough?</div>
-                    <div class="objection-reply" id="hook-reply2">Fair question. I work with Seek Marketing Partners — we help businesses improve online traction. I was genuinely checking your company profile and noticed a few high-impact angles. Happy to share briefly, and you decide if it's worth 2 minutes.</div>
-                </div>
-            </div>
-        </div>
+    <!-- Global Save / Reset -->
+    <div class="global-actions">
+        <button id="globalSaveBtn" class="btn btn-outline btn-sm">💾 Save All Scripts</button>
+        <button id="globalResetBtn" class="btn btn-outline btn-sm">⟳ Reset to Defaults</button>
+    </div>
 
-        <!-- Step 1: Qualification with smart value triggers -->
-        <div class="flow-step" data-step="1">
-            <div class="step-header">
-                <div class="step-number">2</div>
-                <div class="step-title">Qualification</div>
-                <div class="step-badge">🔍 discover needs</div>
-            </div>
-            <div class="step-content">
-                <div class="script-box" id="qualifyScript">Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?</div>
+    <!-- ================= TAB 1: MAIN CALL FLOW (Original) ================= -->
+    <div id="mainflowPane" class="tab-pane active-pane">
+        <div class="script-card">
+            <div class="script-header">
+                <h2>📞 Opening / Qualification / Value / Soft Close <span class="badge">Full flow</span></h2>
                 <div class="button-row">
-                    <button class="btn btn-edit edit-script" data-target="qualifyScript"><span>✏️</span> Edit</button>
-                    <button class="btn btn-primary btn-sm" data-choice="ppc">📢 Running PPC/Ads</button>
-                    <button class="btn btn-primary btn-sm" data-choice="seo">🔎 SEO / Organic</button>
-                    <button class="btn btn-primary btn-sm" data-choice="nothing">✨ Nothing yet</button>
-                </div>
-                <div class="objections-area">
-                    <div class="objections-title">💬 Common objections (qualification)</div>
-                    <div class="objection-chip" data-reply="qualify-reply1">"We already have an agency"</div>
-                    <div class="objection-chip" data-reply="qualify-reply2">"I don't handle marketing"</div>
-                    <div class="objection-reply" id="qualify-reply1">That's great — having an agency shows you value marketing. We often spot small gaps even with existing partners, like reducing wasted ad spend by 20-30% with machine learning. No obligation, just a quick insight.</div>
-                    <div class="objection-reply" id="qualify-reply2">No problem — who on your team would be the right person for a quick chat? Even a 2‑min heads-up, I can leave valuable pointers with them.</div>
+                    <button class="btn btn-sm edit-script-btn" data-target="hookScript">✏️ Edit Opening</button>
+                    <button class="btn btn-sm edit-script-btn" data-target="qualifyScript">✏️ Edit Qualification</button>
+                    <button class="btn btn-sm edit-script-btn" data-target="valueScript">✏️ Edit Value Prop</button>
+                    <button class="btn btn-sm edit-script-btn" data-target="closeScript">✏️ Edit Close</button>
                 </div>
             </div>
-        </div>
+            <div class="script-body">
+                <!-- Opening Script -->
+                <div class="script-text" id="hookScript">Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a nosey at your company profile and had a couple of quick questions… Do you have a minute?
+(Pause and listen — let them say yes/no.)
 
-        <!-- Step 2: Value Proposition (dynamic) -->
-        <div class="flow-step" data-step="2">
-            <div class="step-header">
-                <div class="step-number">3</div>
-                <div class="step-title">Value Proposition</div>
-                <div class="step-badge">💡 adapts to your answer</div>
-            </div>
-            <div class="step-content">
-                <div class="script-box" id="valueScript">Not sure if this is relevant for you, but we’ve been helping businesses like yours get better results from Google and social media ads while cutting wasted spend.\nOur machine-learning approach helps attract more customers online faster, with less ad budget.</div>
+“Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could potentially improve your website traffic and ROI.”</div>
+                <!-- Qualification Script -->
+                <div class="script-text" id="qualifyScript">Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?</div>
                 <div class="button-row">
-                    <button class="btn btn-edit edit-script" data-target="valueScript"><span>✏️</span> Edit value prop</button>
+                    <button class="btn btn-primary btn-sm" data-choice="ppc">📢 Doing PPC/Ads</button>
+                    <button class="btn btn-primary btn-sm" data-choice="seo">🔎 Doing SEO only</button>
+                    <button class="btn btn-primary btn-sm" data-choice="nothing">✨ Nothing / Unsure</button>
                 </div>
-                <div class="objections-area">
-                    <div class="objections-title">💬 Pushbacks & smart replies</div>
-                    <div class="objection-chip" data-reply="value-reply1">"We tried SEO/Ads before, didn't work"</div>
-                    <div class="objection-chip" data-reply="value-reply2">"Sounds expensive"</div>
-                    <div class="objection-reply" id="value-reply1">That's actually common — often it's strategy, not the channel. We use a data-first, machine-learning approach that optimizes for actual conversions, not just clicks. Happy to show a similar business case where we turned around a stalled campaign.</div>
-                    <div class="objection-reply" id="value-reply2">Fair question. We work with businesses at different investment levels — some start with a focused audit to identify quick wins before any major spend. The virtual walkthrough is free and gives actionable ideas regardless.</div>
-                </div>
-            </div>
-        </div>
+                <!-- Value Script -->
+                <div class="script-text" id="valueScript">Not sure if this is relevant for you, but we’ve been helping businesses like yours get better results from Google and social media ads while cutting wasted spend.
+Our machine-learning approach helps attract more customers online faster, with less ad budget.</div>
+                <!-- Close Script -->
+                <div class="script-text" id="closeScript">What we’ve been doing lately is a quick virtual walkthrough — we show the data and strategies relevant to your business. No obligation, but most people walk away with a couple of ideas they can apply straight away.
+Would you be open to a chat tomorrow around 1 pm?</div>
 
-        <!-- Step 3: Soft Close / Appointment -->
-        <div class="flow-step" data-step="3">
-            <div class="step-header">
-                <div class="step-number">4</div>
-                <div class="step-title">Soft Close / Meeting</div>
-                <div class="step-badge">📅 book the chat</div>
-            </div>
-            <div class="step-content">
-                <div class="script-box" id="closeScript">What we’ve been doing lately is a quick virtual walkthrough — we show the data and strategies relevant to your business. No obligation, but most people walk away with a couple of ideas they can apply straight away.\nWould you be open to a chat tomorrow around 1 pm?</div>
-                <div class="button-row">
-                    <button class="btn btn-edit edit-script" data-target="closeScript"><span>✏️</span> Edit closing script</button>
-                </div>
-                <div class="objections-area">
-                    <div class="objections-title">💬 Closing objections — turn into yes</div>
-                    <div class="objection-chip" data-reply="close-reply1">"I don't have time for a meeting"</div>
-                    <div class="objection-chip" data-reply="close-reply2">"Send me info by email first"</div>
-                    <div class="objection-reply" id="close-reply1">I totally get it — everyone's stretched. Would a 10‑minute virtual coffee work? We can screen-share a couple of insights relevant to your business — no slides, no pitch. Most find it helpful even if they don't move forward.</div>
-                    <div class="objection-reply" id="close-reply2">Happy to send a summary. But in my experience, the virtual walkthrough is way more valuable — we can show specific data related to your site. I'll send a quick email now with a Calendly link, you pick a time that works — no pressure.</div>
+                <!-- Objections area (combined for main flow) -->
+                <div class="hesitation-area">
+                    <div class="hesitation-title">💬 Common objections (click to reveal reply)</div>
+                    <div class="hesitation-chip" data-reply-id="mainObj1">"Not interested / Too busy"</div>
+                    <div class="hesitation-chip" data-reply-id="mainObj2">"We already have an agency"</div>
+                    <div class="hesitation-chip" data-reply-id="mainObj3">"Sounds expensive"</div>
+                    <div id="mainObj1" class="dynamic-reply">I completely understand — I'll be super brief. I spotted a couple of quick opportunities that could boost your visibility without much time. If in 60 seconds it's not relevant, feel free to say so — fair?</div>
+                    <div id="mainObj2" class="dynamic-reply">That's great — having someone handle marketing is smart. The reason I ask is we often find small gaps even with existing partners, like reducing wasted ad spend by 20-30% with machine learning. No obligation, just a quick insight.</div>
+                    <div id="mainObj3" class="dynamic-reply">Fair question. We work with businesses at different investment levels — some start with a focused audit to identify quick wins before any major spend. The virtual walkthrough is free and gives you actionable ideas regardless.</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="nav-buttons">
-        <button class="nav-btn" id="prevStepBtn">← Previous step</button>
-        <button class="nav-btn" id="nextStepBtn">Next step →</button>
+    <!-- ================= TAB 2: REBOOKING (Missed Appointment) ================= -->
+    <div id="rebookingPane" class="tab-pane">
+        <div class="script-card">
+            <div class="script-header">
+                <h2>🔄 Rebooking Script · Missed Appointment <span class="badge">Positive tone + soft reschedule</span></h2>
+                <div class="button-row">
+                    <button class="btn btn-sm edit-script-btn" data-target="rebookingScript">✏️ Edit Script</button>
+                    <button class="btn btn-sm copy-script-btn" data-target="rebookingScript">📋 Copy</button>
+                </div>
+            </div>
+            <div class="script-body">
+                <div id="rebookingScript" class="script-text">Hi [Prospect Name], this is Flynn from Seek Marketing Partners. How’s your day going?
+
+I noticed we missed our scheduled Team's call earlier with Toby Whittaker — no worries at all, I understand how busy things can get.
+
+Toby would love to share a few ideas on how [Prospect Company] can [insert specific benefit, e.g., improve Google Ads results / generate more leads online].
+
+Would it be possible to find a time that works better for you this week or next for a quick 15–20 minute session with Toby Whittaker?
+
+I can coordinate the timing around your schedule—what day or time usually works best for you?
+
+Perfect! I’ll send over the Teams invite and make sure Toby is ready to walk you through everything. Thanks for making the time!</div>
+                <div class="button-row">
+                    <button class="btn btn-outline btn-sm fill-rebook-demo">🧪 Fill Demo: [Name]=Michael / [Company]=BrightWave</button>
+                </div>
+                <div class="hesitation-area">
+                    <div class="hesitation-title">💡 Prospect hesitation? Click any rebuttal</div>
+                    <div class="hesitation-chip" data-reply-id="rebookReply1">"I'm too busy, no time"</div>
+                    <div class="hesitation-chip" data-reply-id="rebookReply2">"Not interested anymore"</div>
+                    <div class="hesitation-chip" data-reply-id="rebookReply3">"Just send me info via email"</div>
+                    <div id="rebookReply1" class="dynamic-reply">Totally understand — Toby wanted to keep this extremely focused: just 10 minutes to share 2–3 quick insights specific to [Prospect Company] that could save time and improve results. Would a short 10-minute coffee chat work instead?</div>
+                    <div id="rebookReply2" class="dynamic-reply">I appreciate you letting me know. The only reason I reached out is because Toby prepared a couple of tailored ideas that could directly help [Prospect Company] improve visibility. If you have 5 minutes, I’m happy to briefly share — if it’s not relevant, no pressure at all.</div>
+                    <div id="rebookReply3" class="dynamic-reply">Of course, I can send a summary. But what most people find valuable is the live 15-min walkthrough where Toby can screen-share insights specific to your industry. I’ll send a calendar link — you can pick a slot that works, no obligation.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TAB 3: RECONFIRMATION + COMMITMENT ================= -->
+    <div id="reconfirmationPane" class="tab-pane">
+        <div class="script-card">
+            <div class="script-header">
+                <h2>⏰ Reconfirmation Script · Commitment <span class="badge">Confirmation + hesitation handler</span></h2>
+                <div class="button-row">
+                    <button class="btn btn-sm edit-script-btn" data-target="reconfirmScript">✏️ Edit Script</button>
+                    <button class="btn btn-sm copy-script-btn" data-target="reconfirmScript">📋 Copy</button>
+                </div>
+            </div>
+            <div class="script-body">
+                <div id="reconfirmScript" class="script-text">Hi [Name], it’s Flynn here—just a quick one.
+
+I just wanted to check if you received the Teams calendar invite from Toby Whittaker, our Senior Strategist, for today’s meeting at [time]?
+
+(pause)
+
+Perfect—great. He’s actually prepared a few ideas based on what you shared, so it should be a really worthwhile session for you.
+
+We’ll keep it concise and focused—does that time still work on your end?
+
+(pause)
+
+Brilliant—looking forward to it. Speak shortly!
+
+[If hesitant:] No worries at all—we’ll keep it quick and make sure you get some value out of it either way.</div>
+                <div class="button-row">
+                    <button class="btn btn-outline btn-sm fill-reconf-demo">🧪 Demo: Name = Sarah / time = 2:30 PM</button>
+                </div>
+                <div class="hesitation-area">
+                    <div class="hesitation-title">🎯 Hesitation handler (if client is unsure)</div>
+                    <div class="hesitation-chip" data-reply-id="reconfReply1">"I'm not sure if I have time today"</div>
+                    <div class="hesitation-chip" data-reply-id="reconfReply2">"I need to reschedule"</div>
+                    <div class="hesitation-chip" data-reply-id="reconfReply3">"What exactly will we cover?"</div>
+                    <div id="reconfReply1" class="dynamic-reply">Totally get it — Toby prepared a tight 15-minute overview focused purely on actionable ideas. If it runs even a minute over, you have my permission to jump. Still worth a short session?</div>
+                    <div id="reconfReply2" class="dynamic-reply">No problem at all — I know schedules shift. Let me grab Toby's calendar and we'll find a new slot that suits you better. Just to confirm, you're still interested in those ideas we discussed?</div>
+                    <div id="reconfReply3" class="dynamic-reply">Great question — Toby will walk through 2–3 tailored strategies based on your business goals, share real examples, and answer any questions. No slides, just practical value. Sound good?</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div id="toast" class="toast">✨ Updated</div>
+
+<div id="toastMsg" class="toast-msg">✨ Updated</div>
 
 <script>
-    // ---------- Dynamic Value Prop Templates ----------
-    const VALUE_TEMPLATES = {
-        ppc: `Based on what you shared — we’ve helped businesses maximize Google Ads & social media ROI. Our machine-learning system reduces wasted spend by targeting high-intent users, driving more qualified leads without blowing the budget. Happy to show you a quick example.`,
-        seo: `Since you’re doing SEO — we specialize in data-driven organic growth. We combine technical SEO, content clusters and authority building to double qualified traffic in months. I can share a few free insights relevant to your niche.`,
-        nothing: `Even if you're not running active campaigns, that's actually a huge opportunity. We help businesses start with low-hanging fruit: local SEO, low-cost search ads, and conversion optimization. Many see first leads within weeks.`
+    // DOM elements for main flow scripts
+    const hookScript = document.getElementById('hookScript');
+    const qualifyScript = document.getElementById('qualifyScript');
+    const valueScript = document.getElementById('valueScript');
+    const closeScript = document.getElementById('closeScript');
+    const rebookingScriptDiv = document.getElementById('rebookingScript');
+    const reconfirmScriptDiv = document.getElementById('reconfirmScript');
+
+    // Default values (original + new)
+    const DEFAULTS = {
+        hook: `Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a nosey at your company profile and had a couple of quick questions… Do you have a minute?
+(Pause and listen — let them say yes/no.)
+
+“Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could potentially improve your website traffic and ROI.”`,
+        qualify: `Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?`,
+        value: `Not sure if this is relevant for you, but we’ve been helping businesses like yours get better results from Google and social media ads while cutting wasted spend.
+Our machine-learning approach helps attract more customers online faster, with less ad budget.`,
+        close: `What we’ve been doing lately is a quick virtual walkthrough — we show the data and strategies relevant to your business. No obligation, but most people walk away with a couple of ideas they can apply straight away.
+Would you be open to a chat tomorrow around 1 pm?`,
+        rebooking: `Hi [Prospect Name], this is Flynn from Seek Marketing Partners. How’s your day going?
+
+I noticed we missed our scheduled Team's call earlier with Toby Whittaker — no worries at all, I understand how busy things can get.
+
+Toby would love to share a few ideas on how [Prospect Company] can [insert specific benefit, e.g., improve Google Ads results / generate more leads online].
+
+Would it be possible to find a time that works better for you this week or next for a quick 15–20 minute session with Toby Whittaker?
+
+I can coordinate the timing around your schedule—what day or time usually works best for you?
+
+Perfect! I’ll send over the Teams invite and make sure Toby is ready to walk you through everything. Thanks for making the time!`,
+        reconfirm: `Hi [Name], it’s Flynn here—just a quick one.
+
+I just wanted to check if you received the Teams calendar invite from Toby Whittaker, our Senior Strategist, for today’s meeting at [time]?
+
+(pause)
+
+Perfect—great. He’s actually prepared a few ideas based on what you shared, so it should be a really worthwhile session for you.
+
+We’ll keep it concise and focused—does that time still work on your end?
+
+(pause)
+
+Brilliant—looking forward to it. Speak shortly!
+
+[If hesitant:] No worries at all—we’ll keep it quick and make sure you get some value out of it either way.`
     };
 
-    // default scripts (for reset)
-    const defaultScripts = {
-        hook: document.getElementById('hookScript').innerText,
-        qualify: document.getElementById('qualifyScript').innerText,
-        value: VALUE_TEMPLATES.ppc,
-        close: document.getElementById('closeScript').innerText
+    // Default replies for objections (main flow + rebooking + reconf)
+    const defaultRepliesMap = {
+        mainObj1: `I completely understand — I'll be super brief. I spotted a couple of quick opportunities that could boost your visibility without much time. If in 60 seconds it's not relevant, feel free to say so — fair?`,
+        mainObj2: `That's great — having someone handle marketing is smart. The reason I ask is we often find small gaps even with existing partners, like reducing wasted ad spend by 20-30% with machine learning. No obligation, just a quick insight.`,
+        mainObj3: `Fair question. We work with businesses at different investment levels — some start with a focused audit to identify quick wins before any major spend. The virtual walkthrough is free and gives you actionable ideas regardless.`,
+        rebookReply1: `Totally understand — Toby wanted to keep this extremely focused: just 10 minutes to share 2–3 quick insights specific to [Prospect Company] that could save time and improve results. Would a short 10-minute coffee chat work instead?`,
+        rebookReply2: `I appreciate you letting me know. The only reason I reached out is because Toby prepared a couple of tailored ideas that could directly help [Prospect Company] improve visibility. If you have 5 minutes, I’m happy to briefly share — if it’s not relevant, no pressure at all.`,
+        rebookReply3: `Of course, I can send a summary. But what most people find valuable is the live 15-min walkthrough where Toby can screen-share insights specific to your industry. I’ll send a calendar link — you can pick a slot that works, no obligation.`,
+        reconfReply1: `Totally get it — Toby prepared a tight 15-minute overview focused purely on actionable ideas. If it runs even a minute over, you have my permission to jump. Still worth a short session?`,
+        reconfReply2: `No problem at all — I know schedules shift. Let me grab Toby's calendar and we'll find a new slot that suits you better. Just to confirm, you're still interested in those ideas we discussed?`,
+        reconfReply3: `Great question — Toby will walk through 2–3 tailored strategies based on your business goals, share real examples, and answer any questions. No slides, just practical value. Sound good?`
     };
 
-    // objection reply defaults (full backup)
-    const defaultReplies = {
-        'hook-reply1': document.getElementById('hook-reply1')?.innerText || "",
-        'hook-reply2': document.getElementById('hook-reply2')?.innerText || "",
-        'qualify-reply1': document.getElementById('qualify-reply1')?.innerText || "",
-        'qualify-reply2': document.getElementById('qualify-reply2')?.innerText || "",
-        'value-reply1': document.getElementById('value-reply1')?.innerText || "",
-        'value-reply2': document.getElementById('value-reply2')?.innerText || "",
-        'close-reply1': document.getElementById('close-reply1')?.innerText || "",
-        'close-reply2': document.getElementById('close-reply2')?.innerText || ""
-    };
-
-    // DOM elements
-    let currentStep = 0;
-    const steps = document.querySelectorAll('.flow-step');
-    const totalSteps = steps.length;
-
-    function updateActiveStep() {
-        steps.forEach((step, idx) => {
-            if (idx === currentStep) step.classList.add('active');
-            else step.classList.remove('active');
-        });
-    }
-
-    function goToStep(stepIdx) {
-        if (stepIdx >= 0 && stepIdx < totalSteps) {
-            currentStep = stepIdx;
-            updateActiveStep();
-            const activeEl = steps[currentStep];
-            activeEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }
-
-    // Show toast
-    function showToast(msg, duration = 2000) {
-        const toast = document.getElementById('toast');
+    // Toast helper
+    function showToast(msg) {
+        const toast = document.getElementById('toastMsg');
         toast.innerText = msg;
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), duration);
+        setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
-    // Edit script (inline)
-    function makeEditable(element) {
-        if (element.getAttribute('contenteditable') === 'true') return;
-        element.setAttribute('contenteditable', 'true');
-        element.focus();
-        const onBlur = () => {
-            element.setAttribute('contenteditable', 'false');
-            showToast('✏️ Text updated (click "Save all" to keep permanently)');
-            element.removeEventListener('blur', onBlur);
-        };
-        element.addEventListener('blur', onBlur, { once: true });
-    }
-
-    // Qualification logic: update script + value prop and auto navigate to value step
-    function handleQualification(choice) {
-        const qualifyBox = document.getElementById('qualifyScript');
-        let followUp = "";
-        if (choice === 'ppc') {
-            followUp = "\n\n👤 Rep: Great! Are you managing that in-house or with an agency?\n👤 Rep: Got it — roughly, is your monthly ad spend around £1,000+?";
-        } else if (choice === 'seo') {
-            followUp = "\n\n👤 Rep: Awesome. Is that in-house or agency-led?\n👤 Rep: And do you invest roughly £1,000+ monthly in SEO/content?";
-        } else if (choice === 'nothing') {
-            followUp = "\n\n👤 Rep: No worries — that actually makes this interesting. There’s usually low-hanging fruit to get more traffic without overcomplicating things.";
-        }
-        // improve dynamic qualification text (keep base)
-        let currentText = qualifyBox.innerText.split("\n")[0];
-        qualifyBox.innerText = currentText + followUp;
-
-        // Update value prop based on choice
-        const valueBox = document.getElementById('valueScript');
-        if (VALUE_TEMPLATES[choice]) {
-            valueBox.innerText = VALUE_TEMPLATES[choice];
-        } else {
-            valueBox.innerText = VALUE_TEMPLATES.ppc;
-        }
-        // move to Value Proposition step
-        goToStep(2);
-        showToast(`✅ Value prop updated for "${choice === 'ppc' ? 'PPC/Ads' : choice === 'seo' ? 'SEO' : 'New Business'}" — Step 3 active`);
-    }
-
-    // Save everything: scripts + objection replies
+    // Save all scripts + all hesitation replies
     function saveAllData() {
         const data = {
-            hook: document.getElementById('hookScript').innerText,
-            qualify: document.getElementById('qualifyScript').innerText,
-            value: document.getElementById('valueScript').innerText,
-            close: document.getElementById('closeScript').innerText,
-            objections: {}
+            hook: hookScript.innerText,
+            qualify: qualifyScript.innerText,
+            value: valueScript.innerText,
+            close: closeScript.innerText,
+            rebooking: rebookingScriptDiv.innerText,
+            reconfirm: reconfirmScriptDiv.innerText,
+            replies: {}
         };
-        document.querySelectorAll('.objection-reply').forEach(reply => {
-            data.objections[reply.id] = reply.innerText;
+        const allReplies = document.querySelectorAll('.dynamic-reply');
+        allReplies.forEach(reply => {
+            data.replies[reply.id] = reply.innerHTML;
         });
-        localStorage.setItem('seekFlowPro', JSON.stringify(data));
-        showToast('💾 All scripts & objection replies saved');
+        localStorage.setItem('seekCompleteFlow', JSON.stringify(data));
+        showToast('💾 All scripts & replies saved');
     }
 
     function loadSavedData() {
-        const saved = localStorage.getItem('seekFlowPro');
+        const saved = localStorage.getItem('seekCompleteFlow');
         if (!saved) return false;
         try {
             const data = JSON.parse(saved);
-            if (data.hook) document.getElementById('hookScript').innerText = data.hook;
-            if (data.qualify) document.getElementById('qualifyScript').innerText = data.qualify;
-            if (data.value) document.getElementById('valueScript').innerText = data.value;
-            if (data.close) document.getElementById('closeScript').innerText = data.close;
-            if (data.objections) {
-                for (const [id, text] of Object.entries(data.objections)) {
-                    const elem = document.getElementById(id);
-                    if (elem) elem.innerText = text;
+            if (data.hook) hookScript.innerText = data.hook;
+            if (data.qualify) qualifyScript.innerText = data.qualify;
+            if (data.value) valueScript.innerText = data.value;
+            if (data.close) closeScript.innerText = data.close;
+            if (data.rebooking) rebookingScriptDiv.innerText = data.rebooking;
+            if (data.reconfirm) reconfirmScriptDiv.innerText = data.reconfirm;
+            if (data.replies) {
+                for (let [id, content] of Object.entries(data.replies)) {
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = content;
                 }
             }
             return true;
@@ -634,112 +579,161 @@
     }
 
     function resetToDefaults() {
-        document.getElementById('hookScript').innerText = defaultScripts.hook;
-        document.getElementById('qualifyScript').innerText = defaultScripts.qualify;
-        document.getElementById('valueScript').innerText = defaultScripts.value;
-        document.getElementById('closeScript').innerText = defaultScripts.close;
-        for (const [id, text] of Object.entries(defaultReplies)) {
-            const replyDiv = document.getElementById(id);
-            if (replyDiv) replyDiv.innerText = text;
+        hookScript.innerText = DEFAULTS.hook;
+        qualifyScript.innerText = DEFAULTS.qualify;
+        valueScript.innerText = DEFAULTS.value;
+        closeScript.innerText = DEFAULTS.close;
+        rebookingScriptDiv.innerText = DEFAULTS.rebooking;
+        reconfirmScriptDiv.innerText = DEFAULTS.reconfirm;
+        for (const [id, content] of Object.entries(defaultRepliesMap)) {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = content;
         }
-        localStorage.removeItem('seekFlowPro');
+        localStorage.removeItem('seekCompleteFlow');
         showToast('⟳ Reset to original scripts & replies');
+        refreshDynamicHandlers();
     }
 
-    // export scripts as plain text
-    function exportScripts() {
-        const hook = document.getElementById('hookScript').innerText;
-        const qualify = document.getElementById('qualifyScript').innerText;
-        const valueProp = document.getElementById('valueScript').innerText;
-        const close = document.getElementById('closeScript').innerText;
-        const exportText = `=== SEEK MARKETING SCRIPTS ===\n\n[OPENING]\n${hook}\n\n[QUALIFICATION]\n${qualify}\n\n[VALUE PROP]\n${valueProp}\n\n[SOFT CLOSE]\n${close}`;
-        navigator.clipboard.writeText(exportText).then(() => {
-            showToast('📋 Scripts copied to clipboard');
-        }).catch(() => showToast('Could not copy manually'));
+    // Enable inline edit for script boxes
+    function enableEditable(element) {
+        if (element.getAttribute('contenteditable') === 'true') return;
+        element.setAttribute('contenteditable', 'true');
+        element.focus();
+        const onBlur = () => {
+            element.setAttribute('contenteditable', 'false');
+            showToast('✏️ Script updated (click Save All to persist)');
+            element.removeEventListener('blur', onBlur);
+        };
+        element.addEventListener('blur', onBlur, { once: true });
     }
 
-    // objection handlers (delegation)
-    function attachObjectionEvents() {
-        document.querySelectorAll('.objection-chip').forEach(chip => {
-            chip.removeEventListener('click', chip._clickHandler);
-            const handler = (e) => {
-                const replyId = chip.getAttribute('data-reply');
-                const targetReply = document.getElementById(replyId);
-                if (targetReply) {
-                    const parentArea = chip.closest('.objections-area');
-                    if (parentArea) {
-                        parentArea.querySelectorAll('.objection-reply').forEach(r => r.classList.remove('show'));
-                    }
-                    targetReply.classList.add('show');
-                    targetReply.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // Copy script to clipboard
+    async function copyScript(elementId) {
+        const elem = document.getElementById(elementId);
+        if (!elem) return;
+        try {
+            await navigator.clipboard.writeText(elem.innerText);
+            showToast('📋 Script copied');
+        } catch(e) { showToast('Copy failed'); }
+    }
+
+    // Qualification logic: update value prop & jump to value step (but in main flow tab we simply update)
+    function handleQualification(choice) {
+        let newValue = "";
+        if (choice === 'ppc') newValue = `Not sure if this is relevant for you, but we’ve been helping businesses like yours get better results from Google and social media ads while cutting wasted spend.\nOur machine-learning approach helps attract more customers online faster, with less ad budget.`;
+        else if (choice === 'seo') newValue = `Not sure if this is relevant, but we’ve been helping companies improve search visibility and website traffic while avoiding wasted effort.\nOur data-driven SEO and content strategies bring more visitors and leads organically.`;
+        else newValue = `Even if you’re not running anything at the moment, we’ve been helping businesses spot simple, high-impact ways to get more traffic and leads online — sometimes with very little spend.`;
+        if (valueScript) valueScript.innerText = newValue;
+        showToast(`✓ Value prop updated (${choice === 'ppc' ? 'PPC' : choice === 'seo' ? 'SEO' : 'Startup'})`);
+    }
+
+    // Demo fillers
+    function fillRebookDemo() {
+        let txt = rebookingScriptDiv.innerText;
+        txt = txt.replace(/\[Prospect Name\]/g, 'Michael').replace(/\[Prospect Company\]/g, 'BrightWave');
+        rebookingScriptDiv.innerText = txt;
+        showToast('🧪 Demo placeholders filled: Michael / BrightWave');
+    }
+    function fillReconfDemo() {
+        let txt = reconfirmScriptDiv.innerText;
+        txt = txt.replace(/\[Name\]/g, 'Sarah').replace(/\[time\]/g, '2:30 PM');
+        reconfirmScriptDiv.innerText = txt;
+        showToast('🧪 Demo: Name=Sarah, time=2:30 PM');
+    }
+
+    // Objection chip handler: show associated reply
+    function attachChipHandlers() {
+        document.querySelectorAll('.hesitation-chip').forEach(chip => {
+            chip.removeEventListener('click', chip._listener);
+            const handler = function() {
+                const replyId = this.getAttribute('data-reply-id');
+                const target = document.getElementById(replyId);
+                if (!target) return;
+                const parentArea = this.closest('.hesitation-area');
+                if (parentArea) {
+                    parentArea.querySelectorAll('.dynamic-reply').forEach(r => r.classList.remove('show-reply'));
                 }
+                target.classList.add('show-reply');
+                target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             };
             chip.addEventListener('click', handler);
-            chip._clickHandler = handler;
+            chip._listener = handler;
         });
     }
 
-    // double-click to edit objection replies + visual hint
-    function enableReplyEditing() {
-        document.querySelectorAll('.objection-reply').forEach(reply => {
-            reply.addEventListener('dblclick', function(e) {
+    // Make hesitation replies double-click editable
+    function makeRepliesEditable() {
+        document.querySelectorAll('.dynamic-reply').forEach(reply => {
+            reply.removeEventListener('dblclick', reply._editHandler);
+            const editHandler = function() {
                 this.setAttribute('contenteditable', 'true');
                 this.focus();
-                const saveEdit = () => {
+                const blurSave = () => {
                     this.setAttribute('contenteditable', 'false');
-                    showToast('✏️ Objection reply updated (save to persist)');
-                    this.removeEventListener('blur', saveEdit);
+                    showToast('✏️ Reply updated (save to persist)');
+                    this.removeEventListener('blur', blurSave);
                 };
-                this.addEventListener('blur', saveEdit, { once: true });
+                this.addEventListener('blur', blurSave, { once: true });
+            };
+            reply.addEventListener('dblclick', editHandler);
+            reply._editHandler = editHandler;
+        });
+    }
+
+    function refreshDynamicHandlers() {
+        attachChipHandlers();
+        makeRepliesEditable();
+    }
+
+    // Tab switching
+    function initTabs() {
+        const btns = document.querySelectorAll('.tab-btn');
+        const panes = {
+            mainflow: document.getElementById('mainflowPane'),
+            rebooking: document.getElementById('rebookingPane'),
+            reconfirmation: document.getElementById('reconfirmationPane')
+        };
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                Object.values(panes).forEach(pane => pane.classList.remove('active-pane'));
+                if (tabId === 'mainflow') panes.mainflow.classList.add('active-pane');
+                else if (tabId === 'rebooking') panes.rebooking.classList.add('active-pane');
+                else if (tabId === 'reconfirmation') panes.reconfirmation.classList.add('active-pane');
             });
         });
     }
 
-    // ---- Initialization ----
-    function init() {
-        // load saved data if exists, else set default value prop to ppc template
-        const loaded = loadSavedData();
-        if (!loaded) {
-            document.getElementById('valueScript').innerText = VALUE_TEMPLATES.ppc;
-        }
-        attachObjectionEvents();
-        enableReplyEditing();
-
-        // Edit script buttons
-        document.querySelectorAll('.edit-script').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const targetId = btn.getAttribute('data-target');
-                const targetElem = document.getElementById(targetId);
-                if (targetElem) makeEditable(targetElem);
-            });
+    // Event listeners
+    document.querySelectorAll('.edit-script-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const targetId = btn.getAttribute('data-target');
+            const targetElem = document.getElementById(targetId);
+            if (targetElem) enableEditable(targetElem);
         });
+    });
+    document.querySelectorAll('.copy-script-btn').forEach(btn => {
+        btn.addEventListener('click', () => copyScript(btn.getAttribute('data-target')));
+    });
+    document.querySelectorAll('[data-choice]').forEach(btn => {
+        btn.addEventListener('click', (e) => handleQualification(btn.getAttribute('data-choice')));
+    });
+    const fillRebook = document.querySelector('.fill-rebook-demo');
+    if (fillRebook) fillRebook.addEventListener('click', fillRebookDemo);
+    const fillReconf = document.querySelector('.fill-reconf-demo');
+    if (fillReconf) fillReconf.addEventListener('click', fillReconfDemo);
+    document.getElementById('globalSaveBtn').addEventListener('click', saveAllData);
+    document.getElementById('globalResetBtn').addEventListener('click', resetToDefaults);
 
-        // qualification choice buttons
-        document.querySelectorAll('[data-choice]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const choice = btn.getAttribute('data-choice');
-                handleQualification(choice);
-            });
-        });
-
-        // navigation
-        document.getElementById('prevStepBtn').addEventListener('click', () => goToStep(currentStep - 1));
-        document.getElementById('nextStepBtn').addEventListener('click', () => goToStep(currentStep + 1));
-        document.getElementById('saveAllBtn').addEventListener('click', saveAllData);
-        document.getElementById('resetBtn').addEventListener('click', resetToDefaults);
-        document.getElementById('exportBtn').addEventListener('click', exportScripts);
-
-        // step header navigation
-        steps.forEach((step, idx) => {
-            const header = step.querySelector('.step-header');
-            header.addEventListener('click', () => goToStep(idx));
-        });
-
-        updateActiveStep();
-        goToStep(0);
+    // Initialization
+    if (!loadSavedData()) {
+        // ensure default value prop consistency
+        valueScript.innerText = DEFAULTS.value;
     }
-
-    init();
+    refreshDynamicHandlers();
+    initTabs();
 </script>
 </body>
 </html>
