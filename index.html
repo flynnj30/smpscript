@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Seek Marketing | Flow Script Studio</title>
+    <title>Seek Marketing | Flow Script Studio — Persistent Edits Fixed</title>
     <style>
         * {
             margin: 0;
@@ -18,7 +18,6 @@
             overflow: hidden;
         }
 
-        /* APP LAYOUT */
         .app {
             display: flex;
             height: 100vh;
@@ -26,7 +25,6 @@
             position: relative;
         }
 
-        /* SIDEBAR (collapsible) */
         .sidebar {
             width: 320px;
             background: white;
@@ -47,7 +45,6 @@
             padding: 0;
         }
 
-        /* Sidebar content */
         .sidebar-header {
             padding: 1.5rem 1.25rem 0.75rem;
             border-bottom: 1px solid #eef2f6;
@@ -128,7 +125,6 @@
             color: #cb8b2c;
         }
 
-        /* MAIN PANEL */
         .main {
             flex: 1;
             display: flex;
@@ -138,7 +134,6 @@
             position: relative;
         }
 
-        /* Top Bar with logo & toggle */
         .top-bar {
             background: white;
             backdrop-filter: blur(2px);
@@ -210,7 +205,6 @@
             background: #e6edf4;
         }
 
-        /* Flow Container */
         .flow-wrapper {
             max-width: 850px;
             margin: 2rem auto;
@@ -291,6 +285,7 @@
             gap: 8px;
             flex-wrap: wrap;
             margin-bottom: 0.8rem;
+            align-items: center;
         }
 
         .small-btn {
@@ -380,18 +375,14 @@
 </head>
 <body>
 <div class="app">
-    <!-- SIDEBAR (objections library) -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>📋 Objection Toolkit</h3>
-            <p>Click any objection → reveal scripted reply (editable)</p>
+            <p>Click any objection → reveal scripted reply (double-click to edit, then Save)</p>
         </div>
-        <div class="objections-list" id="objectionsList">
-            <!-- dynamic from JS but also pre-filled for consistency -->
-        </div>
+        <div class="objections-list" id="objectionsList"></div>
     </aside>
 
-    <!-- MAIN AREA -->
     <div class="main">
         <div class="top-bar">
             <div class="logo-area">
@@ -399,15 +390,13 @@
                 <span class="logo-text">Seek Marketing · Flow Script</span>
             </div>
             <div class="action-buttons">
-                <button class="icon-btn" id="globalSaveBtn">💾 Save</button>
+                <button class="icon-btn" id="globalSaveBtn">💾 Save All</button>
                 <button class="icon-btn" id="globalResetBtn">⟳ Reset</button>
             </div>
         </div>
 
         <div class="flow-wrapper">
-            <div id="flowContainer" class="flow-container">
-                <!-- Steps injected dynamically? For simplicity we keep HTML structure but bind -->
-            </div>
+            <div id="flowContainer" class="flow-container"></div>
             <div class="nav-footer">
                 <button id="prevStepBtn">← Previous</button>
                 <button id="nextStepBtn">Next →</button>
@@ -418,7 +407,7 @@
 <div id="toastMsg" class="toast-msg">✨ Updated</div>
 
 <script>
-    // ----- DATA MODELS -----
+    // Core steps with default scripts
     const stepsData = [
         { key: "hook", title: "Opening / Hook", badge: "🎯 start strong", 
           script: `Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a nosey at your company profile and had a couple of quick questions… Do you have a minute?\n(Pause and listen — let them say yes/no.)\n\n"Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could potentially improve your website traffic and ROI."`,
@@ -434,7 +423,7 @@
           choices: [] }
     ];
 
-    // objection library: id, question, reply, step context (for grouping but global sidebar)
+    // Objection library
     const objectionsLibrary = [
         { id: "obj_hook1", question: "“Not interested / Too busy”", reply: "I completely understand — I'll be super brief. I spotted a couple of quick opportunities that could boost your visibility without much time. If in 60 seconds it's not relevant, feel free to say so — fair?" },
         { id: "obj_hook2", question: "“Is this a sales call?”", reply: "Fair question. I work with Seek Marketing Partners — we help businesses improve online traction. I was genuinely checking your company profile and noticed a few high-impact angles. Happy to share briefly and you decide if it's worth 2 minutes." },
@@ -446,18 +435,23 @@
         { id: "obj_close2", question: "“Send me info by email first”", reply: "Happy to send a summary. But in my experience, the virtual walkthrough is way more valuable — we can show specific data related to your site. I'll send a quick email now with a Calendly link, you pick a time that works — no pressure." }
     ];
 
-    let currentStepIdx = 0;
-    let flowStepsElements = [];
-    let scriptElements = {};
-
-    // Value proposition mapping for qualification
+    // Value proposition mapping (only used for initial setup, not to overwrite user edits)
     const valuePropMap = {
         "PPC/Ads": `Not sure if this is relevant for you, but we’ve been helping businesses like yours get better results from Google and social media ads while cutting wasted spend.\nOur machine-learning approach helps attract more customers online faster, with less ad budget.`,
         "SEO only": `Not sure if this is relevant, but we’ve been helping companies improve search visibility and website traffic while avoiding wasted effort.\nOur data-driven SEO and content strategies bring more visitors and leads organically.`,
         "Nothing / Unsure": `Even if you’re not running anything at the moment, we’ve been helping businesses spot simple, high-impact ways to get more traffic and leads online — sometimes with very little spend.`
     };
 
-    // ----- Helper functions -----
+    let currentStepIdx = 0;
+    let flowStepsElements = [];
+    
+    // Track which qualification selections have been made to avoid duplicate appends
+    let qualificationStatus = {
+        PPC_Ads: false,
+        SEO_only: false,
+        Nothing_Unsure: false
+    };
+
     function showToast(msg) {
         const toast = document.getElementById('toastMsg');
         toast.innerText = msg;
@@ -465,99 +459,157 @@
         setTimeout(() => toast.style.opacity = '0', 1800);
     }
 
-    function saveToLocal() {
-        const saveData = {};
+    // Save all data
+    function saveAllToLocal() {
+        const saveData = {
+            scripts: {},
+            objections: {},
+            qualificationStatus: qualificationStatus
+        };
+        
         for (let step of stepsData) {
             const elem = document.getElementById(`script_${step.key}`);
-            if (elem) saveData[step.key] = elem.innerText;
+            if (elem) {
+                saveData.scripts[step.key] = elem.innerText;
+            }
         }
-        // save objection replies
-        const objReplies = {};
-        objectionsLibrary.forEach(obj => {
+        
+        for (let obj of objectionsLibrary) {
             const replyDiv = document.getElementById(`reply_${obj.id}`);
-            if (replyDiv) objReplies[obj.id] = replyDiv.innerText;
-        });
-        const full = { scripts: saveData, objections: objReplies };
-        localStorage.setItem('seekFlowV2', JSON.stringify(full));
-        showToast('💾 All scripts & objection replies saved');
+            if (replyDiv) {
+                saveData.objections[obj.id] = replyDiv.innerText;
+            }
+        }
+        
+        localStorage.setItem('seekFlowPersistentV4', JSON.stringify(saveData));
+        showToast('💾 All scripts & objection replies saved permanently');
     }
 
+    // Load saved data
     function loadFromLocal() {
-        const raw = localStorage.getItem('seekFlowV2');
+        const raw = localStorage.getItem('seekFlowPersistentV4');
         if (!raw) return false;
         try {
             const data = JSON.parse(raw);
             if (data.scripts) {
-                for (let [key, txt] of Object.entries(data.scripts)) {
+                for (let [key, text] of Object.entries(data.scripts)) {
                     const el = document.getElementById(`script_${key}`);
-                    if (el) el.innerText = txt;
+                    if (el && text) el.innerText = text;
                 }
             }
             if (data.objections) {
-                for (let [id, txt] of Object.entries(data.objections)) {
+                for (let [id, text] of Object.entries(data.objections)) {
                     const replyDiv = document.getElementById(`reply_${id}`);
-                    if (replyDiv) replyDiv.innerText = txt;
+                    if (replyDiv && text) replyDiv.innerText = text;
                 }
             }
+            if (data.qualificationStatus) {
+                qualificationStatus = data.qualificationStatus;
+            }
             return true;
-        } catch(e) { return false; }
+        } catch(e) { 
+            return false; 
+        }
     }
 
+    // Reset to defaults
     function resetToDefault() {
-        // reset scripts
         for (let step of stepsData) {
             const el = document.getElementById(`script_${step.key}`);
             if (el) el.innerText = step.script;
         }
-        // reset objections
-        objectionsLibrary.forEach(obj => {
+        
+        for (let obj of objectionsLibrary) {
             const replyDiv = document.getElementById(`reply_${obj.id}`);
             if (replyDiv) replyDiv.innerText = obj.reply;
-        });
-        // reset value script if needed to default PPC
-        const valueElem = document.getElementById(`script_value`);
-        if (valueElem && !valuePropMap["PPC/Ads"]) valueElem.innerText = stepsData[2].script;
-        else if (valueElem) valueElem.innerText = valuePropMap["PPC/Ads"];
-        showToast('⟳ Reset to factory scripts');
-        localStorage.removeItem('seekFlowV2');
+        }
+        
+        // Reset qualification status
+        qualificationStatus = {
+            PPC_Ads: false,
+            SEO_only: false,
+            Nothing_Unsure: false
+        };
+        
+        localStorage.removeItem('seekFlowPersistentV4');
+        showToast('⟳ Reset to factory scripts & replies');
     }
 
-    // Qualification handler: updates qualification script + value prop & jumps
+    function makeEditable(element) {
+        if (element.getAttribute('contenteditable') === 'true') return;
+        element.setAttribute('contenteditable', 'true');
+        element.focus();
+        const onBlur = () => {
+            element.setAttribute('contenteditable', 'false');
+            showToast('✏️ Text updated — click "Save All" to keep permanently');
+            element.removeEventListener('blur', onBlur);
+        };
+        element.addEventListener('blur', onBlur, { once: true });
+    }
+
+    // FIXED: Qualification handler that preserves existing content and doesn't reset
     function handleQualification(choice) {
         const qualifyBox = document.getElementById(`script_qualify`);
         if (!qualifyBox) return;
+        
         let followUp = "";
+        let statusKey = "";
+        
         if (choice === "PPC/Ads") {
             followUp = "\n\n👤 Rep: Great. Are you managing that in-house, or are you working with an agency?\n👤 Rep: Got you. And just out of curiosity — would you say your monthly ad spend is around £1,000 or more?";
+            statusKey = "PPC_Ads";
         } else if (choice === "SEO only") {
             followUp = "\n\n👤 Rep: Nice. Is that in-house, or do you work with an agency?\n👤 Rep: And roughly, do you invest around £1,000 or more per month into SEO or content marketing?";
+            statusKey = "SEO_only";
         } else if (choice === "Nothing / Unsure") {
             followUp = "\n\n👤 Rep: No worries, that actually makes this interesting — there’s usually some low-hanging opportunities we can highlight to get you more traffic without overcomplicating things.";
+            statusKey = "Nothing_Unsure";
         }
-        let base = "Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?";
-        qualifyBox.innerText = base + followUp;
         
-        // update value prop script
+        // Only append if not already added
+        if (!qualificationStatus[statusKey]) {
+            const currentText = qualifyBox.innerText;
+            // Check if the follow-up content is already present to avoid duplicates
+            if (!currentText.includes(followUp.trim().substring(0, 50))) {
+                qualifyBox.innerText = currentText + followUp;
+                qualificationStatus[statusKey] = true;
+                showToast(`✓ Added qualification follow-up for "${choice}"`);
+            }
+        } else {
+            showToast(`ℹ️ "${choice}" follow-up already added`);
+        }
+        
+        // Update value proposition ONLY if it hasn't been customized by the user
+        // We check if the current value script matches any of the default templates
         const valueBox = document.getElementById(`script_value`);
         if (valueBox && valuePropMap[choice]) {
-            valueBox.innerText = valuePropMap[choice];
+            const currentValue = valueBox.innerText;
+            const isDefaultValue = Object.values(valuePropMap).some(defaultVal => 
+                currentValue === defaultVal || currentValue.includes(defaultVal.substring(0, 100))
+            );
+            
+            // Only auto-update if it's still the default content
+            if (isDefaultValue || !currentValue.includes("machine-learning")) {
+                valueBox.innerText = valuePropMap[choice];
+                showToast(`✓ Value proposition updated for "${choice}"`);
+            }
         }
-        // jump to value step (index 2)
+        
+        // Jump to value proposition step
         goToStep(2);
-        showToast(`✓ Value prop updated (${choice})`);
     }
 
-    // ----- RENDER FLOW STEPS -----
     function renderFlow() {
         const container = document.getElementById('flowContainer');
         container.innerHTML = '';
+        flowStepsElements = [];
+        
         stepsData.forEach((step, idx) => {
             const stepDiv = document.createElement('div');
             stepDiv.className = 'flow-step';
             if (idx === currentStepIdx) stepDiv.classList.add('active');
             stepDiv.setAttribute('data-step-idx', idx);
             
-            // header
             const header = document.createElement('div');
             header.className = 'step-header';
             header.innerHTML = `
@@ -565,7 +617,7 @@
                 <span class="step-title">${step.title}</span>
                 <span style="font-size:0.7rem; color:#5f7f9e;">▼</span>
             `;
-            // content
+            
             const content = document.createElement('div');
             content.className = 'step-content';
             const scriptId = `script_${step.key}`;
@@ -574,7 +626,6 @@
             scriptBox.id = scriptId;
             scriptBox.setAttribute('contenteditable', 'false');
             scriptBox.innerText = step.script;
-            scriptElements[step.key] = scriptBox;
             
             const btnRow = document.createElement('div');
             btnRow.className = 'inline-buttons';
@@ -587,7 +638,7 @@
             });
             btnRow.appendChild(editBtn);
             
-            // choices for qualification step
+            // Qualification choices - they now append content instead of replacing
             if (step.choices && step.choices.length > 0 && step.key === 'qualify') {
                 const choiceGroup = document.createElement('div');
                 choiceGroup.className = 'choice-group';
@@ -602,6 +653,14 @@
                     choiceGroup.appendChild(chip);
                 });
                 btnRow.appendChild(choiceGroup);
+                
+                // Add a small helper text
+                const helperText = document.createElement('div');
+                helperText.style.fontSize = '0.7rem';
+                helperText.style.color = '#6c8a9e';
+                helperText.style.marginTop = '6px';
+                helperText.innerText = '💡 Click any option to append qualification details (won\'t erase your edits)';
+                btnRow.appendChild(helperText);
             }
             
             content.appendChild(scriptBox);
@@ -613,28 +672,12 @@
             container.appendChild(stepDiv);
             flowStepsElements.push(stepDiv);
         });
-        attachEditEvents();
-    }
-    
-    function makeEditable(el) {
-        if (el.getAttribute('contenteditable') === 'true') return;
-        el.setAttribute('contenteditable', 'true');
-        el.focus();
-        const onBlur = () => {
-            el.setAttribute('contenteditable', 'false');
-            showToast('✏️ Text updated (click Save to persist)');
-            el.removeEventListener('blur', onBlur);
-        };
-        el.addEventListener('blur', onBlur, { once: true });
-    }
-    
-    function attachEditEvents() {
+        
         document.querySelectorAll('.script-card').forEach(card => {
-            if (!card.hasAttribute('data-listener')) {
-                card.setAttribute('data-listener', 'true');
-                // optional: double click edit too
-                card.addEventListener('dblclick', () => makeEditable(card));
-            }
+            card.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                makeEditable(card);
+            });
         });
     }
     
@@ -650,16 +693,18 @@
         if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     
-    // Render Sidebar objections
     function renderSidebar() {
         const listDiv = document.getElementById('objectionsList');
         listDiv.innerHTML = '';
+        
         objectionsLibrary.forEach(obj => {
             const card = document.createElement('div');
             card.className = 'obj-card';
+            
             const questionDiv = document.createElement('div');
             questionDiv.className = 'obj-question';
             questionDiv.innerHTML = `<span>${obj.question}</span><span class="expand-icon">▶</span>`;
+            
             const answerDiv = document.createElement('div');
             answerDiv.className = 'obj-answer';
             answerDiv.id = `reply_${obj.id}`;
@@ -678,24 +723,26 @@
                     questionDiv.querySelector('.expand-icon').innerHTML = '▶';
                 }
             });
-            // double click to edit answer
-            answerDiv.addEventListener('dblclick', () => {
+            
+            answerDiv.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                if (answerDiv.getAttribute('contenteditable') === 'true') return;
                 answerDiv.setAttribute('contenteditable', 'true');
                 answerDiv.focus();
-                const saveEdit = () => {
+                const onBlurEdit = () => {
                     answerDiv.setAttribute('contenteditable', 'false');
-                    showToast('✏️ Objection reply updated');
-                    answerDiv.removeEventListener('blur', saveEdit);
+                    showToast('✏️ Objection reply updated — click Save All to persist');
+                    answerDiv.removeEventListener('blur', onBlurEdit);
                 };
-                answerDiv.addEventListener('blur', saveEdit, { once: true });
+                answerDiv.addEventListener('blur', onBlurEdit, { once: true });
             });
+            
             card.appendChild(questionDiv);
             card.appendChild(answerDiv);
             listDiv.appendChild(card);
         });
     }
     
-    // Sidebar toggle
     function initSidebarToggle() {
         const sidebar = document.getElementById('sidebar');
         const toggleBtn = document.getElementById('toggleSidebarBtn');
@@ -705,35 +752,20 @@
         });
     }
     
-    // load saved data after rendering
-    function loadAfterRender() {
-        const loaded = loadFromLocal();
-        if (!loaded) {
-            // set default value script properly
-            const valScript = document.getElementById(`script_value`);
-            if (valScript && !valScript.innerText.includes('machine-learning')) {
-                valScript.innerText = valuePropMap["PPC/Ads"];
-            }
-        }
-    }
-    
-    // event binding for nav
     function bindNav() {
         document.getElementById('prevStepBtn').addEventListener('click', () => goToStep(currentStepIdx - 1));
         document.getElementById('nextStepBtn').addEventListener('click', () => goToStep(currentStepIdx + 1));
-        document.getElementById('globalSaveBtn').addEventListener('click', saveToLocal);
+        document.getElementById('globalSaveBtn').addEventListener('click', saveAllToLocal);
         document.getElementById('globalResetBtn').addEventListener('click', resetToDefault);
     }
     
-    // final init
     function init() {
         renderFlow();
         renderSidebar();
         initSidebarToggle();
         bindNav();
-        loadAfterRender();
+        loadFromLocal();
         goToStep(0);
-        // Additional small style for sidebar edit
     }
     
     init();
