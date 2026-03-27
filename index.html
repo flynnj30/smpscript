@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Seek Marketing | Flow Script Studio — Persistent Edits Fixed</title>
+    <title>Seek Marketing | Flow Script Studio — Pro Edition</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #f1f5f9;
+            background: linear-gradient(135deg, #f8fafc 0%, #eff3f8 100%);
             height: 100vh;
             overflow: hidden;
         }
@@ -25,15 +25,17 @@
             position: relative;
         }
 
+        /* Sidebar Styles */
         .sidebar {
-            width: 320px;
-            background: white;
-            border-right: 1px solid #e2e8f0;
+            width: 380px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(2px);
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
             transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             flex-shrink: 0;
-            box-shadow: 2px 0 12px rgba(0,0,0,0.02);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.02);
             z-index: 20;
             overflow-y: auto;
         }
@@ -48,12 +50,13 @@
         .sidebar-header {
             padding: 1.5rem 1.25rem 0.75rem;
             border-bottom: 1px solid #eef2f6;
+            background: linear-gradient(90deg, #fff8f0, white);
         }
 
         .sidebar-header h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #0f2b3b;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e3a5f;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -70,43 +73,50 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.9rem;
         }
 
         .obj-card {
-            background: #fefaf5;
+            background: #ffffff;
             border-radius: 1rem;
-            border: 1px solid #ffe5c4;
+            border: 1px solid #e9edf2;
             overflow: hidden;
             transition: all 0.2s;
+            position: relative;
+        }
+
+        .obj-card.pinned {
+            border-left: 4px solid #f59e0b;
+            background: linear-gradient(90deg, #fffbee, white);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
         }
 
         .obj-question {
-            padding: 0.8rem 1rem;
+            padding: 0.85rem 1rem;
             font-weight: 600;
             font-size: 0.85rem;
-            color: #b45f1b;
-            background: #fff7ed;
+            color: #2c5282;
+            background: #fafcff;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
-            border-bottom: 1px solid #ffe2b5;
+            border-bottom: 1px solid #edf2f7;
         }
 
         .obj-question:hover {
-            background: #fff0df;
+            background: #f7fafc;
         }
 
         .obj-answer {
             padding: 0.9rem 1rem;
             font-size: 0.8rem;
-            line-height: 1.5;
-            color: #2c3e3f;
+            line-height: 1.55;
+            color: #2d3e50;
             background: white;
             display: none;
-            border-top: 1px solid #ffefdb;
+            border-top: 1px solid #f0f4f9;
             cursor: pointer;
             transition: background 0.1s;
         }
@@ -116,27 +126,47 @@
         }
 
         .obj-answer[contenteditable="true"] {
-            background: #fff2df;
+            background: #fff6e5;
             outline: 2px solid #f5b042;
         }
 
-        .expand-icon {
-            font-size: 1.1rem;
-            color: #cb8b2c;
+        .pin-icon {
+            font-size: 1rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px 6px;
+            border-radius: 20px;
+            transition: all 0.1s;
+            color: #a0aec0;
         }
 
+        .pin-icon:hover {
+            transform: scale(1.1);
+            color: #f59e0b;
+        }
+
+        .obj-card.pinned .pin-icon {
+            color: #f59e0b;
+        }
+
+        .expand-icon {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        /* Main Area */
         .main {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
             background: #f8fafc;
-            position: relative;
         }
 
         .top-bar {
-            background: white;
-            backdrop-filter: blur(2px);
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(8px);
             padding: 0.8rem 2rem;
             display: flex;
             align-items: center;
@@ -145,7 +175,8 @@
             position: sticky;
             top: 0;
             z-index: 10;
-            background: rgba(255,255,255,0.96);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .logo-area {
@@ -169,15 +200,10 @@
             color: #2c6e9e;
         }
 
-        .menu-toggle:hover {
-            background: #e2e8f0;
-            transform: scale(0.96);
-        }
-
         .logo-text {
-            font-weight: 700;
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, #1f4662, #3282a7);
+            font-weight: 800;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #1f4662, #2b6a8f);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
@@ -185,14 +211,15 @@
 
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .icon-btn {
             background: transparent;
             border: none;
-            font-size: 1.1rem;
-            padding: 8px 14px;
+            font-size: 0.85rem;
+            padding: 8px 16px;
             border-radius: 40px;
             font-weight: 500;
             cursor: pointer;
@@ -201,15 +228,36 @@
             transition: all 0.2s;
         }
 
+        .icon-btn.primary {
+            background: #1e4a76;
+            color: white;
+        }
+
         .icon-btn:hover {
-            background: #e6edf4;
+            background: #e2e8f0;
+            transform: translateY(-1px);
         }
 
         .flow-wrapper {
-            max-width: 850px;
-            margin: 2rem auto;
-            padding: 0 1.5rem 2rem;
+            max-width: 950px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem 1.5rem;
             width: 100%;
+        }
+
+        .two-column-layout {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .flow-column {
+            flex: 2;
+        }
+
+        .history-column {
+            flex: 1.2;
+            min-width: 260px;
         }
 
         .flow-step {
@@ -223,8 +271,7 @@
 
         .flow-step.active {
             border-left: 5px solid #2c9b6e;
-            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.15);
-            transform: scale(1.01);
+            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.12);
         }
 
         .step-header {
@@ -268,7 +315,7 @@
             padding: 1.2rem;
             border: 1px solid #eef2f6;
             font-size: 0.9rem;
-            line-height: 1.55;
+            line-height: 1.6;
             color: #1f3a46;
             margin-bottom: 1rem;
             white-space: pre-wrap;
@@ -282,9 +329,9 @@
 
         .inline-buttons {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             align-items: center;
         }
 
@@ -297,35 +344,107 @@
             font-weight: 500;
             cursor: pointer;
             color: #2a577b;
+            transition: 0.1s;
         }
 
         .choice-group {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            margin: 12px 0 8px;
+            margin: 8px 0 4px;
         }
 
         .choice-pill {
-            background: #eef3fc;
-            padding: 5px 14px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 500;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.1s;
+            transition: all 0.2s;
+            background: #f0f4f9;
+            color: #1e3a5f;
         }
 
-        .choice-pill:hover {
-            background: #d9e6f5;
-            transform: translateY(-1px);
+        .choice-pill[data-choice="PPC/Ads"]:hover { background: #d9eefb; transform: translateY(-1px); }
+        .choice-pill[data-choice="SEO only"]:hover { background: #e0f2e9; transform: translateY(-1px); }
+        .choice-pill[data-choice="Nothing / Unsure"]:hover { background: #ffe8cf; transform: translateY(-1px); }
+
+        .active-category-badge {
+            background: #e6f7ec;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .version-panel-card {
+            background: white;
+            border-radius: 1.25rem;
+            border: 1px solid #eef2f8;
+            overflow: hidden;
+            position: sticky;
+            top: 90px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .version-header {
+            padding: 1rem 1.2rem;
+            background: #fafcff;
+            border-bottom: 1px solid #edf2f7;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .version-list {
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .version-item {
+            padding: 10px 12px;
+            background: #fefefe;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.1s;
+            border-left: 3px solid transparent;
+            border: 1px solid #eff3f8;
+        }
+
+        .version-item:hover {
+            background: #f8fafd;
+            border-left-color: #f59e0b;
+            transform: translateX(2px);
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e2e3b;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+            z-index: 200;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .nav-footer {
             display: flex;
-            justify-content: space-between;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-top: 1rem;
         }
 
         .nav-footer button {
@@ -336,40 +455,12 @@
             border-radius: 60px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .nav-footer button:hover {
-            background: #eef3fa;
-        }
-
-        .toast-msg {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e2e3b;
-            color: white;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: 0.2s;
-            pointer-events: none;
-            z-index: 200;
-        }
-
-        @media (max-width: 700px) {
-            .sidebar {
-                width: 280px;
-            }
-            .top-bar {
-                padding: 0.6rem 1rem;
-            }
-            .flow-wrapper {
-                padding: 1rem;
-                margin: 1rem auto;
-            }
+        @media (max-width: 800px) {
+            .two-column-layout { flex-direction: column; }
+            .history-column { width: 100%; position: static; }
+            .sidebar { width: 280px; }
         }
     </style>
 </head>
@@ -377,8 +468,8 @@
 <div class="app">
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>📋 Objection Toolkit</h3>
-            <p>Click any objection → reveal scripted reply (double-click to edit, then Save)</p>
+            <h3>📌 Objection Handling Toolkit</h3>
+            <p>Pin important replies · Double-click text to edit</p>
         </div>
         <div class="objections-list" id="objectionsList"></div>
     </aside>
@@ -386,219 +477,339 @@
     <div class="main">
         <div class="top-bar">
             <div class="logo-area">
-                <button class="menu-toggle" id="toggleSidebarBtn" aria-label="Toggle sidebar">☰</button>
-                <span class="logo-text">Seek Marketing · Flow Script</span>
+                <button class="menu-toggle" id="toggleSidebarBtn">☰</button>
+                <span class="logo-text">Seek Marketing · Flow Script Studio</span>
             </div>
             <div class="action-buttons">
-                <button class="icon-btn" id="globalSaveBtn">💾 Save All</button>
-                <button class="icon-btn" id="globalResetBtn">⟳ Reset</button>
+                <button class="icon-btn" id="saveVersionBtn">📸 Save Version</button>
+                <button class="icon-btn" id="globalResetBtn">⟳ Reset Factory</button>
             </div>
         </div>
 
         <div class="flow-wrapper">
-            <div id="flowContainer" class="flow-container"></div>
-            <div class="nav-footer">
-                <button id="prevStepBtn">← Previous</button>
-                <button id="nextStepBtn">Next →</button>
+            <div class="two-column-layout">
+                <div class="flow-column" id="flowColumn">
+                    <div id="flowContainer" class="flow-container"></div>
+                    <div class="nav-footer">
+                        <button id="prevStepBtn">← Previous Step</button>
+                        <button id="nextStepBtn">Next Step →</button>
+                    </div>
+                </div>
+                
+                <!-- Version History Panel - Enhanced with additional features -->
+                <div class="history-column">
+                    <div class="version-panel-card">
+                        <div class="version-header">
+                            <span>📜 Version History</span>
+                            <button id="clearVersionsBtn" style="background:none; border:none; font-size:1rem; cursor:pointer; color:#94a3b8;" title="Clear all versions">🗑️</button>
+                        </div>
+                        <div class="version-list" id="versionList">
+                            <div style="text-align:center; padding:20px; color:#94a3b8;">No versions yet</div>
+                        </div>
+                        <div style="padding: 8px 12px; border-top: 1px solid #edf2f7; font-size:0.7rem; color:#5c6f87; display: flex; gap: 8px;">
+                            <span>🔄 Auto-save on edits</span>
+                            <span>⭐ Click version to restore</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div id="toastMsg" class="toast-msg">✨ Updated</div>
+<div id="toastMsg" class="toast-msg"></div>
 
 <script>
-    // Core steps with default scripts
-    const stepsData = [
-        { key: "hook", title: "Opening / Hook", badge: "🎯 start strong", 
-          script: `Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a nosey at your company profile and had a couple of quick questions… Do you have a minute?\n(Pause and listen — let them say yes/no.)\n\n"Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could potentially improve your website traffic and ROI."`,
-          choices: [] },
-        { key: "qualify", title: "Qualification", badge: "🔍 understand setup",
-          script: `Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?`,
-          choices: ["PPC/Ads", "SEO only", "Nothing / Unsure"] },
-        { key: "value", title: "Value Proposition", badge: "💡 adapts to answer",
-          script: `Not sure if this is relevant for you, but we’ve been helping businesses like yours get better results from Google and social media ads while cutting wasted spend.\nOur machine-learning approach helps attract more customers online faster, with less ad budget.`,
-          choices: [] },
-        { key: "close", title: "Soft Close / Appointment", badge: "📅 book the chat",
-          script: `What we’ve been doing lately is a quick virtual walkthrough — we show the data and strategies relevant to your business. No obligation, but most people walk away with a couple of ideas they can apply straight away.\nWould you be open to a chat tomorrow around 1 pm?`,
-          choices: [] }
-    ];
-
-    // Objection library
-    const objectionsLibrary = [
-        { id: "obj_hook1", question: "“Not interested / Too busy”", reply: "I completely understand — I'll be super brief. I spotted a couple of quick opportunities that could boost your visibility without much time. If in 60 seconds it's not relevant, feel free to say so — fair?" },
-        { id: "obj_hook2", question: "“Is this a sales call?”", reply: "Fair question. I work with Seek Marketing Partners — we help businesses improve online traction. I was genuinely checking your company profile and noticed a few high-impact angles. Happy to share briefly and you decide if it's worth 2 minutes." },
-        { id: "obj_qual1", question: "“We already have an agency”", reply: "That's great — having someone handle marketing is smart. The reason I ask is we often find small gaps even with existing partners, like reducing wasted ad spend by 20-30% with machine learning. No obligation, just a quick insight." },
-        { id: "obj_qual2", question: "“I don't handle marketing”", reply: "No problem at all — who on your team would be the right person to have a quick chat? Even a 2-min heads-up, I can leave valuable pointers with them." },
-        { id: "obj_value1", question: "“We tried SEO/Ads before, didn't work”", reply: "That's actually common — often it's strategy, not the channel. We use a data-first, machine-learning approach that optimizes for actual conversions, not just clicks. Happy to show a similar business case where we turned around a stalled campaign." },
-        { id: "obj_value2", question: "“Sounds expensive”", reply: "Fair question. We work with businesses at different investment levels — some start with a focused audit to identify quick wins before any major spend. The virtual walkthrough is free and gives you actionable ideas regardless." },
-        { id: "obj_close1", question: "“I don't have time for a meeting”", reply: "I totally get it — everyone's stretched. Would a 10-minute virtual coffee work? We can just screen-share a couple of insights relevant to your business — no slides, no pitch. Most find it helpful even if they don't move forward." },
-        { id: "obj_close2", question: "“Send me info by email first”", reply: "Happy to send a summary. But in my experience, the virtual walkthrough is way more valuable — we can show specific data related to your site. I'll send a quick email now with a Calendly link, you pick a time that works — no pressure." }
-    ];
-
-    // Value proposition mapping (only used for initial setup, not to overwrite user edits)
-    const valuePropMap = {
-        "PPC/Ads": `Not sure if this is relevant for you, but we’ve been helping businesses like yours get better results from Google and social media ads while cutting wasted spend.\nOur machine-learning approach helps attract more customers online faster, with less ad budget.`,
-        "SEO only": `Not sure if this is relevant, but we’ve been helping companies improve search visibility and website traffic while avoiding wasted effort.\nOur data-driven SEO and content strategies bring more visitors and leads organically.`,
-        "Nothing / Unsure": `Even if you’re not running anything at the moment, we’ve been helping businesses spot simple, high-impact ways to get more traffic and leads online — sometimes with very little spend.`
+    // ============================================
+    // ORIGINAL SCRIPTS (preserved from first HTML5)
+    // ============================================
+    const ORIGINAL_SCRIPTS = {
+        hook: `Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a nosey at your company profile and had a couple of quick questions… Do you have a minute?\n(Pause and listen — let them say yes/no.)\n\n"Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could potentially improve your website traffic and ROI."`,
+        
+        qualify: `Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?`,
+        
+        // THREE DISTINCT, UNIQUE VALUE PROPOSITION SCRIPTS (original from first HTML requirement)
+        value_ppc: `Not sure if this is relevant for you, but we’ve been helping businesses like yours get better results from Google and social media ads while cutting wasted spend.\nOur machine-learning approach helps attract more customers online faster, with less ad budget.`,
+        
+        value_seo: `Not sure if this is relevant, but we’ve been helping companies improve search visibility and website traffic while avoiding wasted effort.\nOur data-driven SEO and content strategies bring more visitors and leads organically.`,
+        
+        value_nothing: `Even if you’re not running anything at the moment, we’ve been helping businesses spot simple, high-impact ways to get more traffic and leads online — sometimes with very little spend.`,
+        
+        close: `What we’ve been doing lately is a quick virtual walkthrough — we show the data and strategies relevant to your business. No obligation, but most people walk away with a couple of ideas they can apply straight away.\nWould you be open to a chat tomorrow around 1 pm?`
     };
 
+    // Objection library (original)
+    const objectionsLibrary = [
+        { id: "obj1", question: "“Not interested / Too busy”", reply: "I completely understand — I'll be super brief. I spotted a couple of quick opportunities that could boost your visibility without much time. If in 60 seconds it's not relevant, feel free to say so — fair?" },
+        { id: "obj2", question: "“Is this a sales call?”", reply: "Fair question. I work with Seek Marketing Partners — we help businesses improve online traction. I was genuinely checking your company profile and noticed a few high-impact angles. Happy to share briefly and you decide if it's worth 2 minutes." },
+        { id: "obj3", question: "“We already have an agency”", reply: "That's great — having someone handle marketing is smart. The reason I ask is we often find small gaps even with existing partners, like reducing wasted ad spend by 20-30% with machine learning. No obligation, just a quick insight." },
+        { id: "obj4", question: "“I don't handle marketing”", reply: "No problem at all — who on your team would be the right person to have a quick chat? Even a 2-min heads-up, I can leave valuable pointers with them." },
+        { id: "obj5", question: "“We tried SEO/Ads before, didn't work”", reply: "That's actually common — often it's strategy, not the channel. We use a data-first, machine-learning approach that optimizes for actual conversions, not just clicks. Happy to show a similar business case where we turned around a stalled campaign." },
+        { id: "obj6", question: "“Sounds expensive”", reply: "Fair question. We work with businesses at different investment levels — some start with a focused audit to identify quick wins before any major spend. The virtual walkthrough is free and gives you actionable ideas regardless." }
+    ];
+
+    // Step definitions
+    const stepsData = [
+        { key: "hook", title: "Opening / Hook", badge: "🎯 Start Strong", scriptKey: "hook" },
+        { key: "qualify", title: "Qualification", badge: "🔍 Discovery", scriptKey: "qualify", hasChoices: true },
+        { key: "value", title: "Value Proposition", badge: "💡 Tailored Solution", scriptKey: "value_ppc", isDynamic: true },
+        { key: "close", title: "Soft Close / Appointment", badge: "📅 Next Step", scriptKey: "close" }
+    ];
+
+    // State management
     let currentStepIdx = 0;
     let flowStepsElements = [];
-    
-    // Track which qualification selections have been made to avoid duplicate appends
-    let qualificationStatus = {
-        PPC_Ads: false,
-        SEO_only: false,
-        Nothing_Unsure: false
+    let pinnedObjections = new Set();
+    let qualificationFlags = { "PPC/Ads": false, "SEO only": false, "Nothing / Unsure": false };
+    let currentActiveCategory = "PPC/Ads";  // tracks which value prop is active
+    let customValueScripts = {  // stores user-edited versions for each category separately
+        "PPC/Ads": ORIGINAL_SCRIPTS.value_ppc,
+        "SEO only": ORIGINAL_SCRIPTS.value_seo,
+        "Nothing / Unsure": ORIGINAL_SCRIPTS.value_nothing
     };
+    let versionHistory = [];
 
-    function showToast(msg) {
+    // Helper functions
+    function showToast(msg, duration = 2000) {
         const toast = document.getElementById('toastMsg');
         toast.innerText = msg;
         toast.style.opacity = '1';
-        setTimeout(() => toast.style.opacity = '0', 1800);
+        setTimeout(() => toast.style.opacity = '0', duration);
     }
 
-    // Save all data
-    function saveAllToLocal() {
-        const saveData = {
+    // Persist everything to localStorage
+    function persistFullState() {
+        const state = {
             scripts: {},
             objections: {},
-            qualificationStatus: qualificationStatus
+            pinned: Array.from(pinnedObjections),
+            qualificationFlags,
+            currentActiveCategory,
+            customValueScripts,
+            versionHistory
         };
-        
+        // Save current displayed scripts (actual DOM content)
         for (let step of stepsData) {
-            const elem = document.getElementById(`script_${step.key}`);
-            if (elem) {
-                saveData.scripts[step.key] = elem.innerText;
-            }
+            const el = document.getElementById(`script_${step.key}`);
+            if (el) state.scripts[step.key] = el.innerText;
         }
-        
+        // Save custom value scripts separately
+        state.customValueScripts = customValueScripts;
         for (let obj of objectionsLibrary) {
             const replyDiv = document.getElementById(`reply_${obj.id}`);
-            if (replyDiv) {
-                saveData.objections[obj.id] = replyDiv.innerText;
-            }
+            if (replyDiv) state.objections[obj.id] = replyDiv.innerText;
         }
-        
-        localStorage.setItem('seekFlowPersistentV4', JSON.stringify(saveData));
-        showToast('💾 All scripts & objection replies saved permanently');
+        localStorage.setItem('seekStudioProV3', JSON.stringify(state));
     }
 
-    // Load saved data
-    function loadFromLocal() {
-        const raw = localStorage.getItem('seekFlowPersistentV4');
+    // Load from localStorage
+    function loadFullState() {
+        const raw = localStorage.getItem('seekStudioProV3');
         if (!raw) return false;
         try {
             const data = JSON.parse(raw);
+            if (data.customValueScripts) customValueScripts = data.customValueScripts;
+            if (data.currentActiveCategory) currentActiveCategory = data.currentActiveCategory;
+            if (data.qualificationFlags) qualificationFlags = data.qualificationFlags;
+            if (data.pinned) pinnedObjections = new Set(data.pinned);
+            if (data.versionHistory) versionHistory = data.versionHistory;
+            
+            // Restore scripts into DOM
             if (data.scripts) {
-                for (let [key, text] of Object.entries(data.scripts)) {
+                for (let [key, txt] of Object.entries(data.scripts)) {
                     const el = document.getElementById(`script_${key}`);
-                    if (el && text) el.innerText = text;
+                    if (el && txt) el.innerText = txt;
                 }
+            }
+            // Ensure value proposition reflects the active category's saved script
+            const valueEl = document.getElementById(`script_value`);
+            if (valueEl && customValueScripts[currentActiveCategory]) {
+                valueEl.innerText = customValueScripts[currentActiveCategory];
             }
             if (data.objections) {
-                for (let [id, text] of Object.entries(data.objections)) {
-                    const replyDiv = document.getElementById(`reply_${id}`);
-                    if (replyDiv && text) replyDiv.innerText = text;
+                for (let [id, txt] of Object.entries(data.objections)) {
+                    const el = document.getElementById(`reply_${id}`);
+                    if (el && txt) el.innerText = txt;
                 }
             }
-            if (data.qualificationStatus) {
-                qualificationStatus = data.qualificationStatus;
-            }
+            updatePinnedUI();
+            renderVersionHistory();
             return true;
-        } catch(e) { 
-            return false; 
-        }
+        } catch(e) { return false; }
     }
 
-    // Reset to defaults
-    function resetToDefault() {
-        for (let step of stepsData) {
-            const el = document.getElementById(`script_${step.key}`);
-            if (el) el.innerText = step.script;
-        }
-        
-        for (let obj of objectionsLibrary) {
-            const replyDiv = document.getElementById(`reply_${obj.id}`);
-            if (replyDiv) replyDiv.innerText = obj.reply;
-        }
-        
-        // Reset qualification status
-        qualificationStatus = {
-            PPC_Ads: false,
-            SEO_only: false,
-            Nothing_Unsure: false
-        };
-        
-        localStorage.removeItem('seekFlowPersistentV4');
-        showToast('⟳ Reset to factory scripts & replies');
+    // Update value proposition based on selected category, preserving per-category edits
+    function updateValuePropositionForCategory(category) {
+        const valueBox = document.getElementById(`script_value`);
+        if (!valueBox) return;
+        currentActiveCategory = category;
+        // Load the saved custom script for this category (or original if never edited)
+        const scriptToUse = customValueScripts[category] || ORIGINAL_SCRIPTS[`value_${category === "PPC/Ads" ? "ppc" : category === "SEO only" ? "seo" : "nothing"}`];
+        valueBox.innerText = scriptToUse;
+        showToast(`📋 Value Proposition switched to ${category} strategy`, 1500);
+        persistFullState();
     }
 
-    function makeEditable(element) {
-        if (element.getAttribute('contenteditable') === 'true') return;
-        element.setAttribute('contenteditable', 'true');
-        element.focus();
-        const onBlur = () => {
-            element.setAttribute('contenteditable', 'false');
-            showToast('✏️ Text updated — click "Save All" to keep permanently');
-            element.removeEventListener('blur', onBlur);
-        };
-        element.addEventListener('blur', onBlur, { once: true });
-    }
-
-    // FIXED: Qualification handler that preserves existing content and doesn't reset
+    // Handle qualification selection - append follow-up only once, update VP separately
     function handleQualification(choice) {
         const qualifyBox = document.getElementById(`script_qualify`);
         if (!qualifyBox) return;
         
         let followUp = "";
-        let statusKey = "";
-        
         if (choice === "PPC/Ads") {
             followUp = "\n\n👤 Rep: Great. Are you managing that in-house, or are you working with an agency?\n👤 Rep: Got you. And just out of curiosity — would you say your monthly ad spend is around £1,000 or more?";
-            statusKey = "PPC_Ads";
         } else if (choice === "SEO only") {
             followUp = "\n\n👤 Rep: Nice. Is that in-house, or do you work with an agency?\n👤 Rep: And roughly, do you invest around £1,000 or more per month into SEO or content marketing?";
-            statusKey = "SEO_only";
         } else if (choice === "Nothing / Unsure") {
             followUp = "\n\n👤 Rep: No worries, that actually makes this interesting — there’s usually some low-hanging opportunities we can highlight to get you more traffic without overcomplicating things.";
-            statusKey = "Nothing_Unsure";
         }
         
-        // Only append if not already added
-        if (!qualificationStatus[statusKey]) {
+        // Append follow-up only once per category
+        if (!qualificationFlags[choice]) {
             const currentText = qualifyBox.innerText;
-            // Check if the follow-up content is already present to avoid duplicates
-            if (!currentText.includes(followUp.trim().substring(0, 50))) {
+            if (!currentText.includes(followUp.trim().substring(0, 40))) {
                 qualifyBox.innerText = currentText + followUp;
-                qualificationStatus[statusKey] = true;
+                qualificationFlags[choice] = true;
                 showToast(`✓ Added qualification follow-up for "${choice}"`);
+                persistFullState();
             }
         } else {
             showToast(`ℹ️ "${choice}" follow-up already added`);
         }
         
-        // Update value proposition ONLY if it hasn't been customized by the user
-        // We check if the current value script matches any of the default templates
-        const valueBox = document.getElementById(`script_value`);
-        if (valueBox && valuePropMap[choice]) {
-            const currentValue = valueBox.innerText;
-            const isDefaultValue = Object.values(valuePropMap).some(defaultVal => 
-                currentValue === defaultVal || currentValue.includes(defaultVal.substring(0, 100))
-            );
-            
-            // Only auto-update if it's still the default content
-            if (isDefaultValue || !currentValue.includes("machine-learning")) {
-                valueBox.innerText = valuePropMap[choice];
-                showToast(`✓ Value proposition updated for "${choice}"`);
-            }
-        }
+        // Update Value Proposition with the category's unique script (keeps per-category edits)
+        updateValuePropositionForCategory(choice);
         
-        // Jump to value proposition step
+        // Auto-create version snapshot on qualification selection
+        createVersionSnapshot(`🎯 Qualification: ${choice} selected → VP updated`);
+        
+        // Move to Value Proposition step for better flow
         goToStep(2);
     }
 
+    // Save user edits to value proposition, preserving per-category storage
+    function saveValuePropositionEdit(newText, category) {
+        customValueScripts[category] = newText;
+        persistFullState();
+        showToast(`💾 ${category} value proposition saved independently`, 1500);
+    }
+
+    function makeEditable(element, isValueStep = false) {
+        if (element.getAttribute('contenteditable') === 'true') return;
+        element.setAttribute('contenteditable', 'true');
+        element.focus();
+        const onBlur = () => {
+            element.setAttribute('contenteditable', 'false');
+            if (isValueStep) {
+                const editedText = element.innerText;
+                saveValuePropositionEdit(editedText, currentActiveCategory);
+                showToast(`✏️ ${currentActiveCategory} value script saved — other categories unchanged`);
+            } else {
+                persistFullState();
+                showToast('✏️ Script updated & auto-saved');
+            }
+            element.removeEventListener('blur', onBlur);
+        };
+        element.addEventListener('blur', onBlur, { once: true });
+    }
+
+    // Version History Functions
+    function createVersionSnapshot(descriptionHint = "Manual snapshot") {
+        const snapshot = {
+            scripts: {},
+            customValueScripts: { ...customValueScripts },
+            qualificationFlags: { ...qualificationFlags },
+            currentActiveCategory,
+            objections: {}
+        };
+        for (let step of stepsData) {
+            const el = document.getElementById(`script_${step.key}`);
+            if (el) snapshot.scripts[step.key] = el.innerText;
+        }
+        for (let obj of objectionsLibrary) {
+            const replyDiv = document.getElementById(`reply_${obj.id}`);
+            if (replyDiv) snapshot.objections[obj.id] = replyDiv.innerText;
+        }
+        const timestamp = new Date().toLocaleString();
+        const versionId = Date.now();
+        versionHistory.unshift({ id: versionId, timestamp, description: descriptionHint, snapshot });
+        if (versionHistory.length > 30) versionHistory.pop();
+        persistFullState();
+        renderVersionHistory();
+        showToast(`📌 Version saved: ${descriptionHint}`);
+    }
+
+    function restoreSnapshot(version) {
+        const snap = version.snapshot;
+        if (snap.scripts) {
+            for (let [key, text] of Object.entries(snap.scripts)) {
+                const el = document.getElementById(`script_${key}`);
+                if (el) el.innerText = text;
+            }
+        }
+        if (snap.customValueScripts) {
+            customValueScripts = snap.customValueScripts;
+        }
+        if (snap.qualificationFlags) qualificationFlags = snap.qualificationFlags;
+        if (snap.currentActiveCategory) currentActiveCategory = snap.currentActiveCategory;
+        if (snap.objections) {
+            for (let [id, text] of Object.entries(snap.objections)) {
+                const el = document.getElementById(`reply_${id}`);
+                if (el) el.innerText = text;
+            }
+        }
+        // Refresh value proposition display
+        const valueBox = document.getElementById(`script_value`);
+        if (valueBox && customValueScripts[currentActiveCategory]) {
+            valueBox.innerText = customValueScripts[currentActiveCategory];
+        }
+        updatePinnedUI();
+        persistFullState();
+        showToast(`⏪ Restored version from ${version.timestamp}`);
+    }
+
+    function renderVersionHistory() {
+        const container = document.getElementById('versionList');
+        if (!container) return;
+        if (versionHistory.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8;">✨ No versions yet<br>Click "Save Version"</div>';
+            return;
+        }
+        container.innerHTML = versionHistory.map(v => `
+            <div class="version-item" data-version-id="${v.id}">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong style="font-size:0.75rem;">🕒 ${v.timestamp}</strong>
+                    <span style="font-size:0.6rem; background:#f1f5f9; padding:2px 6px; border-radius:20px;">restore</span>
+                </div>
+                <div style="font-size:0.7rem; color:#4b5563; margin-top:4px;">${v.description}</div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.version-item').forEach(el => {
+            el.addEventListener('click', () => {
+                const id = parseInt(el.dataset.versionId);
+                const version = versionHistory.find(v => v.id === id);
+                if (version) restoreSnapshot(version);
+            });
+        });
+    }
+
+    function clearVersionHistory() {
+        if (confirm("Delete all saved versions? This cannot be undone.")) {
+            versionHistory = [];
+            persistFullState();
+            renderVersionHistory();
+            showToast("🗑️ Version history cleared");
+        }
+    }
+
+    function updatePinnedUI() {
+        document.querySelectorAll('.obj-card').forEach(card => {
+            const id = card.dataset.objId;
+            if (id && pinnedObjections.has(id)) card.classList.add('pinned');
+            else card.classList.remove('pinned');
+        });
+    }
+
+    // Render flow steps
     function renderFlow() {
         const container = document.getElementById('flowContainer');
         container.innerHTML = '';
@@ -608,44 +819,48 @@
             const stepDiv = document.createElement('div');
             stepDiv.className = 'flow-step';
             if (idx === currentStepIdx) stepDiv.classList.add('active');
-            stepDiv.setAttribute('data-step-idx', idx);
             
             const header = document.createElement('div');
             header.className = 'step-header';
-            header.innerHTML = `
-                <span class="step-badge">${step.badge}</span>
-                <span class="step-title">${step.title}</span>
-                <span style="font-size:0.7rem; color:#5f7f9e;">▼</span>
-            `;
+            header.innerHTML = `<span class="step-badge">${step.badge}</span><span class="step-title">${step.title}</span><span style="font-size:0.7rem;">▼</span>`;
             
             const content = document.createElement('div');
             content.className = 'step-content';
-            const scriptId = `script_${step.key}`;
             const scriptBox = document.createElement('div');
             scriptBox.className = 'script-card';
-            scriptBox.id = scriptId;
+            scriptBox.id = `script_${step.key}`;
             scriptBox.setAttribute('contenteditable', 'false');
-            scriptBox.innerText = step.script;
+            
+            // Set initial text
+            if (step.key === 'value') {
+                scriptBox.innerText = customValueScripts[currentActiveCategory];
+            } else {
+                const originalKey = step.scriptKey;
+                scriptBox.innerText = ORIGINAL_SCRIPTS[originalKey] || "";
+            }
             
             const btnRow = document.createElement('div');
             btnRow.className = 'inline-buttons';
             const editBtn = document.createElement('button');
-            editBtn.innerText = '✏️ Edit script';
+            editBtn.innerText = '✏️ Edit Script';
             editBtn.className = 'small-btn';
             editBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                makeEditable(scriptBox);
+                makeEditable(scriptBox, step.key === 'value');
             });
             btnRow.appendChild(editBtn);
             
-            // Qualification choices - they now append content instead of replacing
-            if (step.choices && step.choices.length > 0 && step.key === 'qualify') {
+            // Qualification choices
+            if (step.hasChoices) {
                 const choiceGroup = document.createElement('div');
                 choiceGroup.className = 'choice-group';
-                step.choices.forEach(ch => {
+                const choices = ["PPC/Ads", "SEO only", "Nothing / Unsure"];
+                choices.forEach(ch => {
                     const chip = document.createElement('span');
                     chip.className = 'choice-pill';
                     chip.innerText = ch;
+                    chip.setAttribute('data-choice', ch);
+                    chip.style.background = ch === "PPC/Ads" ? "#d9eefb" : (ch === "SEO only" ? "#e0f2e9" : "#ffe8cf");
                     chip.addEventListener('click', (e) => {
                         e.stopPropagation();
                         handleQualification(ch);
@@ -654,30 +869,94 @@
                 });
                 btnRow.appendChild(choiceGroup);
                 
-                // Add a small helper text
-                const helperText = document.createElement('div');
-                helperText.style.fontSize = '0.7rem';
-                helperText.style.color = '#6c8a9e';
-                helperText.style.marginTop = '6px';
-                helperText.innerText = '💡 Click any option to append qualification details (won\'t erase your edits)';
-                btnRow.appendChild(helperText);
+                const activeBadge = document.createElement('span');
+                activeBadge.className = 'active-category-badge';
+                activeBadge.id = 'activeVpBadge';
+                activeBadge.innerHTML = `📌 Active: ${currentActiveCategory}`;
+                btnRow.appendChild(activeBadge);
             }
             
             content.appendChild(scriptBox);
             content.appendChild(btnRow);
             stepDiv.appendChild(header);
             stepDiv.appendChild(content);
-            
             header.addEventListener('click', () => goToStep(idx));
             container.appendChild(stepDiv);
             flowStepsElements.push(stepDiv);
         });
         
         document.querySelectorAll('.script-card').forEach(card => {
+            const isValueCard = card.id === 'script_value';
             card.addEventListener('dblclick', (e) => {
                 e.stopPropagation();
-                makeEditable(card);
+                makeEditable(card, isValueCard);
             });
+        });
+        
+        // Update active badge if exists
+        const badge = document.getElementById('activeVpBadge');
+        if (badge) badge.innerHTML = `📌 Active: ${currentActiveCategory}`;
+    }
+    
+    function renderSidebar() {
+        const listDiv = document.getElementById('objectionsList');
+        listDiv.innerHTML = '';
+        objectionsLibrary.forEach(obj => {
+            const card = document.createElement('div');
+            card.className = 'obj-card';
+            card.dataset.objId = obj.id;
+            if (pinnedObjections.has(obj.id)) card.classList.add('pinned');
+            
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'obj-question';
+            const pinBtn = document.createElement('button');
+            pinBtn.innerHTML = pinnedObjections.has(obj.id) ? '📍' : '📌';
+            pinBtn.className = 'pin-icon';
+            pinBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (pinnedObjections.has(obj.id)) {
+                    pinnedObjections.delete(obj.id);
+                    showToast(`📌 Unpinned`);
+                } else {
+                    pinnedObjections.add(obj.id);
+                    showToast(`📍 Pinned`);
+                }
+                updatePinnedUI();
+                persistFullState();
+            });
+            questionDiv.innerHTML = `<span>${obj.question}</span>`;
+            questionDiv.appendChild(pinBtn);
+            
+            const answerDiv = document.createElement('div');
+            answerDiv.className = 'obj-answer';
+            answerDiv.id = `reply_${obj.id}`;
+            answerDiv.innerText = obj.reply;
+            answerDiv.setAttribute('contenteditable', 'false');
+            
+            let expanded = false;
+            questionDiv.addEventListener('click', (e) => {
+                if(e.target === pinBtn) return;
+                expanded = !expanded;
+                answerDiv.classList.toggle('show', expanded);
+            });
+            
+            answerDiv.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                if (answerDiv.getAttribute('contenteditable') === 'true') return;
+                answerDiv.setAttribute('contenteditable', 'true');
+                answerDiv.focus();
+                const saveEdit = () => {
+                    answerDiv.setAttribute('contenteditable', 'false');
+                    persistFullState();
+                    showToast('💬 Objection reply saved');
+                    answerDiv.removeEventListener('blur', saveEdit);
+                };
+                answerDiv.addEventListener('blur', saveEdit, { once: true });
+            });
+            
+            card.appendChild(questionDiv);
+            card.appendChild(answerDiv);
+            listDiv.appendChild(card);
         });
     }
     
@@ -689,83 +968,57 @@
             if (i === currentStepIdx) el.classList.add('active');
             else el.classList.remove('active');
         });
-        const activeEl = flowStepsElements[currentStepIdx];
-        if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.querySelector('.flow-step.active')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     
-    function renderSidebar() {
-        const listDiv = document.getElementById('objectionsList');
-        listDiv.innerHTML = '';
-        
-        objectionsLibrary.forEach(obj => {
-            const card = document.createElement('div');
-            card.className = 'obj-card';
-            
-            const questionDiv = document.createElement('div');
-            questionDiv.className = 'obj-question';
-            questionDiv.innerHTML = `<span>${obj.question}</span><span class="expand-icon">▶</span>`;
-            
-            const answerDiv = document.createElement('div');
-            answerDiv.className = 'obj-answer';
-            answerDiv.id = `reply_${obj.id}`;
-            answerDiv.innerText = obj.reply;
-            answerDiv.setAttribute('contenteditable', 'false');
-            
-            let expanded = false;
-            questionDiv.addEventListener('click', (e) => {
-                e.stopPropagation();
-                expanded = !expanded;
-                if (expanded) {
-                    answerDiv.classList.add('show');
-                    questionDiv.querySelector('.expand-icon').innerHTML = '▼';
-                } else {
-                    answerDiv.classList.remove('show');
-                    questionDiv.querySelector('.expand-icon').innerHTML = '▶';
+    function resetToFactory() {
+        if (confirm("Reset all scripts to original factory defaults? Version history will be preserved.")) {
+            // Reset all scripts to original
+            for (let step of stepsData) {
+                const el = document.getElementById(`script_${step.key}`);
+                if (el) {
+                    if (step.key === 'value') {
+                        customValueScripts = {
+                            "PPC/Ads": ORIGINAL_SCRIPTS.value_ppc,
+                            "SEO only": ORIGINAL_SCRIPTS.value_seo,
+                            "Nothing / Unsure": ORIGINAL_SCRIPTS.value_nothing
+                        };
+                        el.innerText = customValueScripts[currentActiveCategory];
+                    } else {
+                        el.innerText = ORIGINAL_SCRIPTS[step.scriptKey];
+                    }
                 }
-            });
-            
-            answerDiv.addEventListener('dblclick', (e) => {
-                e.stopPropagation();
-                if (answerDiv.getAttribute('contenteditable') === 'true') return;
-                answerDiv.setAttribute('contenteditable', 'true');
-                answerDiv.focus();
-                const onBlurEdit = () => {
-                    answerDiv.setAttribute('contenteditable', 'false');
-                    showToast('✏️ Objection reply updated — click Save All to persist');
-                    answerDiv.removeEventListener('blur', onBlurEdit);
-                };
-                answerDiv.addEventListener('blur', onBlurEdit, { once: true });
-            });
-            
-            card.appendChild(questionDiv);
-            card.appendChild(answerDiv);
-            listDiv.appendChild(card);
-        });
-    }
-    
-    function initSidebarToggle() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleBtn = document.getElementById('toggleSidebarBtn');
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            toggleBtn.innerHTML = sidebar.classList.contains('collapsed') ? '☰' : '✖';
-        });
-    }
-    
-    function bindNav() {
-        document.getElementById('prevStepBtn').addEventListener('click', () => goToStep(currentStepIdx - 1));
-        document.getElementById('nextStepBtn').addEventListener('click', () => goToStep(currentStepIdx + 1));
-        document.getElementById('globalSaveBtn').addEventListener('click', saveAllToLocal);
-        document.getElementById('globalResetBtn').addEventListener('click', resetToDefault);
+            }
+            // Reset objections
+            for (let obj of objectionsLibrary) {
+                const replyDiv = document.getElementById(`reply_${obj.id}`);
+                if (replyDiv) replyDiv.innerText = obj.reply;
+            }
+            qualificationFlags = { "PPC/Ads": false, "SEO only": false, "Nothing / Unsure": false };
+            pinnedObjections.clear();
+            currentActiveCategory = "PPC/Ads";
+            updatePinnedUI();
+            persistFullState();
+            showToast('🏭 Factory reset complete — all original scripts restored');
+            const badge = document.getElementById('activeVpBadge');
+            if (badge) badge.innerHTML = `📌 Active: ${currentActiveCategory}`;
+        }
     }
     
     function init() {
         renderFlow();
         renderSidebar();
-        initSidebarToggle();
-        bindNav();
-        loadFromLocal();
+        loadFullState();
         goToStep(0);
+        document.getElementById('toggleSidebarBtn').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        });
+        document.getElementById('prevStepBtn').addEventListener('click', () => goToStep(currentStepIdx - 1));
+        document.getElementById('nextStepBtn').addEventListener('click', () => goToStep(currentStepIdx + 1));
+        document.getElementById('saveVersionBtn').addEventListener('click', () => createVersionSnapshot("📝 Manual snapshot"));
+        document.getElementById('globalResetBtn').addEventListener('click', resetToFactory);
+        document.getElementById('clearVersionsBtn')?.addEventListener('click', clearVersionHistory);
+        window.addEventListener('beforeunload', () => { persistFullState(); });
     }
     
     init();
