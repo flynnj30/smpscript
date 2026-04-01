@@ -68,7 +68,7 @@
             margin-top: 6px;
         }
 
-        /* NEW: Notes & Scripts Section */
+        /* Notes & Scripts Section */
         .notes-section {
             padding: 1rem;
             border-bottom: 1px solid #eef2f6;
@@ -143,14 +143,6 @@
 
         .note-title-bar:hover {
             background: #f7fafc;
-        }
-
-        .note-title-text {
-            flex: 1;
-            font-weight: 600;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .note-title-input {
@@ -284,7 +276,7 @@
             color: #a0aec0;
         }
 
-        /* Main Area (unchanged functionality) */
+        /* Main Area */
         .main {
             flex: 1;
             display: flex;
@@ -341,6 +333,7 @@
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .icon-btn {
@@ -361,6 +354,94 @@
             color: white;
         }
 
+        /* Dropdown Version History Button */
+        .version-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .version-dropdown-btn {
+            background: #f1f5f9;
+            border: none;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #2c4f6e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .version-dropdown-btn:hover {
+            background: #e2e8f0;
+        }
+        .version-dropdown-content {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: white;
+            min-width: 300px;
+            max-height: 420px;
+            overflow-y: auto;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.02);
+            z-index: 100;
+            display: none;
+            border: 1px solid #eef2f8;
+        }
+        .version-dropdown-content.show {
+            display: block;
+        }
+        .version-header-drop {
+            padding: 0.8rem 1rem;
+            background: #fafcff;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1e3a5f;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 5;
+        }
+        .version-list-drop {
+            padding: 0.5rem;
+        }
+        .version-item-drop {
+            padding: 10px 12px;
+            background: #fefefe;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px solid #eff3f8;
+            transition: all 0.1s;
+        }
+        .version-item-drop:hover {
+            background: #f8fafd;
+            border-color: #cbd5e1;
+        }
+        .version-item-drop strong {
+            font-size: 0.7rem;
+            color: #2c6e9e;
+        }
+        .clear-versions-drop {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 30px;
+            color: #94a3b8;
+        }
+        .clear-versions-drop:hover {
+            color: #dc2626;
+            background: #fef2f2;
+        }
+
         .flow-wrapper {
             max-width: 950px;
             margin: 1.5rem auto;
@@ -368,19 +449,8 @@
             width: 100%;
         }
 
-        .two-column-layout {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
-
-        .flow-column {
-            flex: 2;
-        }
-
-        .history-column {
-            flex: 1.2;
-            min-width: 260px;
+        .flow-container {
+            width: 100%;
         }
 
         .flow-step {
@@ -482,40 +552,6 @@
             margin-left: 10px;
         }
 
-        .version-panel-card {
-            background: white;
-            border-radius: 1.25rem;
-            border: 1px solid #eef2f8;
-            overflow: hidden;
-            position: sticky;
-            top: 90px;
-        }
-
-        .version-header {
-            padding: 1rem 1.2rem;
-            background: #fafcff;
-            border-bottom: 1px solid #edf2f7;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .version-list {
-            max-height: 380px;
-            overflow-y: auto;
-            padding: 0.5rem;
-        }
-
-        .version-item {
-            padding: 10px 12px;
-            background: #fefefe;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            border: 1px solid #eff3f8;
-        }
-
         .toast-msg {
             position: fixed;
             bottom: 25px;
@@ -549,8 +585,8 @@
         }
 
         @media (max-width: 800px) {
-            .two-column-layout { flex-direction: column; }
             .sidebar { width: 280px; }
+            .version-dropdown-content { right: 0; left: auto; min-width: 260px; }
         }
     </style>
 </head>
@@ -562,14 +598,12 @@
             <p>Pin important replies · Double-click text to edit</p>
         </div>
 
-        <!-- NEW FEATURE: Dynamic Notes & Scripts Section (Expandable, Title, Save) -->
         <div class="notes-section">
             <div class="notes-header">
                 <h4>📓 Scripts & Notes Library</h4>
                 <button class="add-note-btn" id="addNoteBtn" title="Add new note/script">+</button>
             </div>
             <div id="notesListContainer" class="notes-list">
-                <!-- dynamic notes will appear here -->
                 <div class="empty-notes-message">✨ Click '+' to create a note or paste script. Click title to expand.</div>
             </div>
         </div>
@@ -584,31 +618,31 @@
                 <span class="logo-text">Seek Marketing · Flow Script Studio</span>
             </div>
             <div class="action-buttons">
+                <!-- Dropdown Version History Button -->
+                <div class="version-dropdown" id="versionDropdownContainer">
+                    <button class="version-dropdown-btn" id="versionDropdownBtn">
+                        📜 History ▼
+                    </button>
+                    <div class="version-dropdown-content" id="versionDropdownContent">
+                        <div class="version-header-drop">
+                            <span>📜 Version History</span>
+                            <button id="clearVersionsDropdownBtn" class="clear-versions-drop" title="Clear all versions">🗑️ Clear</button>
+                        </div>
+                        <div id="versionListDropdown" class="version-list-drop">
+                            <div style="text-align:center; padding:20px; color:#94a3b8;">No versions yet</div>
+                        </div>
+                    </div>
+                </div>
                 <button class="icon-btn" id="saveVersionBtn">📸 Save Version</button>
                 <button class="icon-btn" id="globalResetBtn">⟳ Reset Factory</button>
             </div>
         </div>
 
         <div class="flow-wrapper">
-            <div class="two-column-layout">
-                <div class="flow-column" id="flowColumn">
-                    <div id="flowContainer" class="flow-container"></div>
-                    <div class="nav-footer">
-                        <button id="prevStepBtn">← Previous Step</button>
-                        <button id="nextStepBtn">Next Step →</button>
-                    </div>
-                </div>
-                <div class="history-column">
-                    <div class="version-panel-card">
-                        <div class="version-header">
-                            <span>📜 Version History</span>
-                            <button id="clearVersionsBtn" style="background:none; border:none; font-size:1rem; cursor:pointer;">🗑️</button>
-                        </div>
-                        <div class="version-list" id="versionList">
-                            <div style="text-align:center; padding:20px;">No versions yet</div>
-                        </div>
-                    </div>
-                </div>
+            <div id="flowContainer" class="flow-container"></div>
+            <div class="nav-footer">
+                <button id="prevStepBtn">← Previous Step</button>
+                <button id="nextStepBtn">Next Step →</button>
             </div>
         </div>
     </div>
@@ -616,7 +650,7 @@
 <div id="toastMsg" class="toast-msg"></div>
 
 <script>
-    // ======================= CORE ORIGINAL SCRIPT LOGIC (preserved) =======================
+    // ======================= CORE ORIGINAL SCRIPT LOGIC =======================
     const ORIGINAL_SCRIPTS = {
         hook: `Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a nosey at your company profile and had a couple of quick questions… Do you have a minute?\n(Pause and listen — let them say yes/no.)\n\n"Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could potentially improve your website traffic and ROI."`,
         qualify: `Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?`,
@@ -642,17 +676,15 @@
     let currentStepIdx = 0;
     let flowStepsElements = [];
     let pinnedObjections = new Set();
-    let qualificationFlags = { "PPC/Ads": false, "SEO only": false, "Nothing / Unsure": false };
+    let qualificationFlags = { "PPC/Ads": false, "SEO only": false, "Nothing/Unsure": false };
     let currentActiveCategory = "PPC/Ads";
     let customValueScripts = {
         "PPC/Ads": ORIGINAL_SCRIPTS.value_ppc,
         "SEO only": ORIGINAL_SCRIPTS.value_seo,
-        "Nothing / Unsure": ORIGINAL_SCRIPTS.value_nothing
+        "Nothing/Unsure": ORIGINAL_SCRIPTS.value_nothing
     };
     let versionHistory = [];
-
-    // NEW: Notes & Scripts data model
-    let notesArray = [];  // each note: { id, title, content, createdAt }
+    let notesArray = [];
 
     function showToast(msg) { const toast = document.getElementById('toastMsg'); toast.innerText = msg; toast.style.opacity = '1'; setTimeout(() => toast.style.opacity = '0', 2000); }
     function persistFullState() {
@@ -678,19 +710,38 @@
             if (valueEl && customValueScripts[currentActiveCategory]) valueEl.innerText = customValueScripts[currentActiveCategory];
             if (data.objections) for (let [id, txt] of Object.entries(data.objections)) { const el = document.getElementById(`reply_${id}`); if (el && txt) el.innerText = txt; }
             updatePinnedUI();
-            renderVersionHistory();
+            renderVersionHistoryDropdown();
             renderNotesUI();
             return true;
         } catch(e) { return false; }
     }
 
     function updatePinnedUI() { document.querySelectorAll('.obj-card').forEach(card => { const id = card.dataset.objId; if (id && pinnedObjections.has(id)) card.classList.add('pinned'); else card.classList.remove('pinned'); }); }
-    function renderVersionHistory() {
-        const container = document.getElementById('versionList'); if (!container) return;
-        if (versionHistory.length === 0) { container.innerHTML = '<div style="text-align:center; padding:20px;">✨ No versions</div>'; return; }
-        container.innerHTML = versionHistory.map(v => `<div class="version-item" data-version-id="${v.id}"><div><strong>🕒 ${v.timestamp}</strong></div><div style="font-size:0.7rem;">${v.description}</div></div>`).join('');
-        document.querySelectorAll('.version-item').forEach(el => { el.addEventListener('click', () => { const id = parseInt(el.dataset.versionId); const ver = versionHistory.find(v => v.id === id); if (ver) restoreSnapshot(ver); }); });
+    
+    function renderVersionHistoryDropdown() {
+        const dropdownContainer = document.getElementById('versionListDropdown');
+        if (!dropdownContainer) return;
+        if (versionHistory.length === 0) {
+            dropdownContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8;">✨ No versions saved yet</div>';
+            return;
+        }
+        dropdownContainer.innerHTML = versionHistory.map(v => `
+            <div class="version-item-drop" data-version-id="${v.id}">
+                <div><strong>🕒 ${v.timestamp}</strong></div>
+                <div style="font-size:0.7rem; color:#5c6f87;">${v.description}</div>
+            </div>
+        `).join('');
+        document.querySelectorAll('#versionListDropdown .version-item-drop').forEach(el => {
+            el.addEventListener('click', (e) => { 
+                e.stopPropagation(); 
+                const id = parseInt(el.dataset.versionId); 
+                const ver = versionHistory.find(v => v.id === id); 
+                if (ver) restoreSnapshot(ver);
+                document.getElementById('versionDropdownContent')?.classList.remove('show');
+            });
+        });
     }
+    
     function restoreSnapshot(version) {
         const snap = version.snapshot;
         if (snap.scripts) for (let [key, text] of Object.entries(snap.scripts)) { const el = document.getElementById(`script_${key}`); if (el) el.innerText = text; }
@@ -702,17 +753,19 @@
         const valueBox = document.getElementById(`script_value`);
         if (valueBox && customValueScripts[currentActiveCategory]) valueBox.innerText = customValueScripts[currentActiveCategory];
         updatePinnedUI(); renderNotesUI(); persistFullState(); showToast(`Restored ${version.timestamp}`);
+        renderVersionHistoryDropdown();
     }
+    
     function createVersionSnapshot(desc) {
         const snapshot = { scripts: {}, customValueScripts: { ...customValueScripts }, qualificationFlags: { ...qualificationFlags }, currentActiveCategory, objections: {}, notesArray: JSON.parse(JSON.stringify(notesArray)) };
         for (let step of stepsData) { const el = document.getElementById(`script_${step.key}`); if (el) snapshot.scripts[step.key] = el.innerText; }
         for (let obj of objectionsLibrary) { const replyDiv = document.getElementById(`reply_${obj.id}`); if (replyDiv) snapshot.objections[obj.id] = replyDiv.innerText; }
         versionHistory.unshift({ id: Date.now(), timestamp: new Date().toLocaleString(), description: desc, snapshot });
         if (versionHistory.length > 30) versionHistory.pop();
-        persistFullState(); renderVersionHistory(); showToast(`✅ ${desc}`);
+        persistFullState(); renderVersionHistoryDropdown(); showToast(`✅ ${desc}`);
     }
 
-    // ========== NOTES FEATURE: Expandable, Title, Save Button (Icon-based) ==========
+    // Notes functions
     function saveNote(noteId) {
         const note = notesArray.find(n => n.id === noteId);
         if (!note) return;
@@ -721,11 +774,10 @@
         if (titleInput) note.title = titleInput.value.trim() || "Untitled Note";
         if (contentDiv) note.content = contentDiv.innerText;
         persistFullState();
-        renderNotesUI();  // re-render to refresh display
+        renderNotesUI();
         showToast(`💾 Note "${note.title}" saved`);
         createVersionSnapshot(`Saved note: ${note.title}`);
     }
-
     function deleteNote(noteId) {
         if (confirm("Delete this note/script permanently?")) {
             notesArray = notesArray.filter(n => n.id !== noteId);
@@ -735,7 +787,6 @@
             createVersionSnapshot("Deleted a note");
         }
     }
-
     function addNewNote() {
         const newId = Date.now();
         notesArray.unshift({ id: newId, title: "New Script", content: "Paste or type your script/note here. Double-click content to edit. Click title to expand/collapse." });
@@ -744,7 +795,6 @@
         showToast("✏️ New note added. Click title to expand & edit.");
         createVersionSnapshot("Added new note");
     }
-
     function makeNoteContentEditable(element, noteId) {
         if (element.getAttribute('contenteditable') === 'true') return;
         element.setAttribute('contenteditable', 'true');
@@ -757,7 +807,6 @@
         };
         element.addEventListener('blur', saveEdit, { once: true });
     }
-
     function renderNotesUI() {
         const container = document.getElementById('notesListContainer');
         if (!container) return;
@@ -778,15 +827,12 @@
                 <div id="note-content-${note.id}" class="note-content" contenteditable="false">${escapeHtml(note.content)}</div>
             </div>
         `).join('');
-
-        // Attach events after render
         notesArray.forEach(note => {
             const titleBar = document.querySelector(`.note-title-bar[data-expand-id="${note.id}"]`);
             const contentDiv = document.getElementById(`note-content-${note.id}`);
             const saveBtn = document.querySelector(`.save-note-icon[data-note-id="${note.id}"]`);
             const delBtn = document.querySelector(`.delete-note-icon[data-note-id="${note.id}"]`);
             const titleInput = document.getElementById(`note-title-${note.id}`);
-            
             let expanded = false;
             if (titleBar) {
                 titleBar.addEventListener('click', (e) => {
@@ -800,14 +846,13 @@
             if (titleInput) titleInput.addEventListener('change', (e) => { e.stopPropagation(); saveNote(note.id); });
             if (contentDiv) {
                 contentDiv.addEventListener('dblclick', (e) => { e.stopPropagation(); makeNoteContentEditable(contentDiv, note.id); });
-                if (note.content.trim() !== "") contentDiv.classList.add('show'); else contentDiv.classList.remove('show');
+                if (note.content.trim() !== "") contentDiv.classList.add('show');
             }
         });
     }
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }); }
 
-    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) { return c; }); }
-
-    // ========== Original Helper Functions (reused) ==========
+    // Flow helpers
     function updateValuePropositionForCategory(category) { currentActiveCategory = category; const valueBox = document.getElementById(`script_value`); if(valueBox) valueBox.innerText = customValueScripts[category]; showToast(`📋 VP: ${category}`); persistFullState(); }
     function handleQualification(choice) {
         const qualifyBox = document.getElementById(`script_qualify`); if(!qualifyBox) return;
@@ -878,8 +923,14 @@
         document.getElementById('nextStepBtn').addEventListener('click', () => goToStep(currentStepIdx+1));
         document.getElementById('saveVersionBtn').addEventListener('click', () => createVersionSnapshot("Manual snapshot"));
         document.getElementById('globalResetBtn').addEventListener('click', resetToFactory);
-        document.getElementById('clearVersionsBtn').addEventListener('click', () => { if(confirm("Clear all versions?")){ versionHistory=[]; persistFullState(); renderVersionHistory(); showToast("Versions cleared"); } });
         document.getElementById('addNoteBtn').addEventListener('click', addNewNote);
+        
+        const dropdownBtn = document.getElementById('versionDropdownBtn');
+        const dropdownContent = document.getElementById('versionDropdownContent');
+        dropdownBtn.addEventListener('click', (e) => { e.stopPropagation(); dropdownContent.classList.toggle('show'); });
+        document.addEventListener('click', (e) => { if (!dropdownBtn.contains(e.target) && !dropdownContent.contains(e.target)) dropdownContent.classList.remove('show'); });
+        const clearDropdown = document.getElementById('clearVersionsDropdownBtn');
+        if(clearDropdown) clearDropdown.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Clear all versions?")){ versionHistory=[]; persistFullState(); renderVersionHistoryDropdown(); showToast("Versions cleared"); dropdownContent.classList.remove('show'); } });
         window.addEventListener('beforeunload', () => persistFullState());
     }
     init();
