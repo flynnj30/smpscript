@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #eff3f8 100%);
+            background: linear-gradient(135deg, #0a0f1a 0%, #0c1220 100%);
             height: 100vh;
             overflow: hidden;
         }
@@ -25,17 +25,17 @@
             position: relative;
         }
 
-        /* Sidebar Styles - Enhanced with Note Section */
+        /* Sidebar Styles - Futuristic Dark Theme */
         .sidebar {
             width: 420px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(2px);
-            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            background: rgba(18, 25, 40, 0.95);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(0, 255, 255, 0.15);
             display: flex;
             flex-direction: column;
             transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             flex-shrink: 0;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.02);
+            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5);
             z-index: 20;
             overflow-y: auto;
         }
@@ -49,30 +49,31 @@
 
         .sidebar-header {
             padding: 1.5rem 1.25rem 0.75rem;
-            border-bottom: 1px solid #eef2f6;
-            background: linear-gradient(90deg, #fff8f0, white);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            background: linear-gradient(90deg, rgba(0, 255, 255, 0.05), transparent);
         }
 
         .sidebar-header h3 {
             font-size: 1.1rem;
             font-weight: 700;
-            color: #1e3a5f;
+            color: #0ff;
             display: flex;
             align-items: center;
             gap: 8px;
+            text-shadow: 0 0 5px rgba(0,255,255,0.3);
         }
 
         .sidebar-header p {
             font-size: 0.7rem;
-            color: #5c6f87;
+            color: #8ba0c0;
             margin-top: 6px;
         }
 
         /* Notes & Scripts Section */
         .notes-section {
             padding: 1rem;
-            border-bottom: 1px solid #eef2f6;
-            background: #fefdf8;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            background: rgba(10, 20, 30, 0.5);
         }
 
         .notes-header {
@@ -85,29 +86,31 @@
         .notes-header h4 {
             font-size: 0.85rem;
             font-weight: 700;
-            color: #2c5282;
+            color: #0ff;
             letter-spacing: 0.3px;
         }
 
         .add-note-btn {
-            background: #1e4a76;
+            background: linear-gradient(135deg, #0ff, #00aaff);
             border: none;
-            color: white;
+            color: #0a0f1a;
             width: 28px;
             height: 28px;
             border-radius: 30px;
             font-size: 1.2rem;
+            font-weight: bold;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 0 8px rgba(0,255,255,0.5);
         }
 
         .add-note-btn:hover {
-            background: #f59e0b;
+            background: linear-gradient(135deg, #ff44cc, #ff00aa);
             transform: scale(1.02);
+            box-shadow: 0 0 12px rgba(255,68,204,0.6);
         }
 
         .notes-list {
@@ -120,39 +123,66 @@
         }
 
         .note-card {
-            background: white;
+            background: rgba(25, 35, 55, 0.8);
             border-radius: 1rem;
-            border: 1px solid #e9edf2;
+            border: 1px solid rgba(0, 255, 255, 0.2);
             transition: all 0.2s;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            cursor: grab;
+            backdrop-filter: blur(4px);
         }
-
+        .note-card:active {
+            cursor: grabbing;
+        }
+        .note-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+        .drag-handle {
+            cursor: grab;
+            padding: 0 8px;
+            font-size: 1rem;
+            color: #0ff;
+            transition: color 0.1s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .drag-handle:active {
+            cursor: grabbing;
+        }
         .note-title-bar {
             padding: 0.7rem 0.9rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            background: #fbfdff;
+            background: rgba(30, 45, 70, 0.6);
             border-radius: 1rem;
             font-weight: 600;
             font-size: 0.85rem;
-            color: #1f4662;
+            color: #ccdeff;
             border-bottom: 1px solid transparent;
+        }
+        .note-title-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
         }
 
         .note-title-bar:hover {
-            background: #f7fafc;
+            background: rgba(0, 255, 255, 0.1);
         }
 
         .note-title-input {
             font-weight: 600;
             font-size: 0.85rem;
-            border: 1px solid #f5bc70;
+            border: 1px solid #0ff;
             border-radius: 12px;
             padding: 4px 8px;
             width: 70%;
-            background: #fffef7;
+            background: #0a1020;
+            color: #0ff;
         }
 
         .note-actions {
@@ -168,13 +198,13 @@
             cursor: pointer;
             padding: 2px 5px;
             border-radius: 20px;
-            color: #7f8c8d;
+            color: #8ba0c0;
             transition: all 0.1s;
         }
 
         .note-icon-btn:hover {
-            color: #f59e0b;
-            background: #f1f5f9;
+            color: #0ff;
+            background: rgba(0, 255, 255, 0.2);
         }
 
         .note-content {
@@ -182,9 +212,9 @@
             display: none;
             font-size: 0.8rem;
             line-height: 1.55;
-            color: #2d3e50;
-            background: #fefef9;
-            border-top: 1px solid #f0f4f9;
+            color: #b8c8e8;
+            background: rgba(10, 18, 30, 0.8);
+            border-top: 1px solid rgba(0, 255, 255, 0.15);
             white-space: pre-wrap;
             word-break: break-word;
         }
@@ -194,8 +224,8 @@
         }
 
         .note-content[contenteditable="true"] {
-            background: #fff6e5;
-            outline: 2px solid #f5b042;
+            background: #1a2a3f;
+            outline: 2px solid #0ff;
             border-radius: 12px;
             padding: 12px;
         }
@@ -203,12 +233,12 @@
         .empty-notes-message {
             text-align: center;
             padding: 20px;
-            color: #94a3b8;
+            color: #5a6e8c;
             font-size: 0.75rem;
             font-style: italic;
         }
 
-        /* Original Objections List */
+        /* Objections List */
         .objections-list {
             padding: 1rem;
             display: flex;
@@ -217,42 +247,42 @@
         }
 
         .obj-card {
-            background: #ffffff;
+            background: rgba(25, 35, 55, 0.8);
             border-radius: 1rem;
-            border: 1px solid #e9edf2;
+            border: 1px solid rgba(0, 255, 255, 0.2);
             overflow: hidden;
             transition: all 0.2s;
             position: relative;
         }
 
         .obj-card.pinned {
-            border-left: 4px solid #f59e0b;
-            background: linear-gradient(90deg, #fffbee, white);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            border-left: 4px solid #ff44cc;
+            background: linear-gradient(90deg, rgba(255,68,204,0.1), rgba(25,35,55,0.8));
+            box-shadow: 0 0 15px rgba(255,68,204,0.2);
         }
 
         .obj-question {
             padding: 0.85rem 1rem;
             font-weight: 600;
             font-size: 0.85rem;
-            color: #2c5282;
-            background: #fafcff;
+            color: #0ff;
+            background: rgba(30, 45, 70, 0.5);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
-            border-bottom: 1px solid #edf2f7;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
         }
 
         .obj-answer {
             padding: 0.9rem 1rem;
             font-size: 0.8rem;
             line-height: 1.55;
-            color: #2d3e50;
-            background: white;
+            color: #b8c8e8;
+            background: rgba(10, 20, 35, 0.8);
             display: none;
-            border-top: 1px solid #f0f4f9;
+            border-top: 1px solid rgba(0, 255, 255, 0.1);
             cursor: pointer;
         }
 
@@ -261,8 +291,8 @@
         }
 
         .obj-answer[contenteditable="true"] {
-            background: #fff6e5;
-            outline: 2px solid #f5b042;
+            background: #1a2a3f;
+            outline: 2px solid #ff44cc;
         }
 
         .pin-icon {
@@ -273,26 +303,26 @@
             padding: 4px 6px;
             border-radius: 20px;
             transition: all 0.1s;
-            color: #a0aec0;
+            color: #ff44cc;
         }
 
-        /* Main Area */
+        /* Main Area - Dark Futuristic */
         .main {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            background: #f8fafc;
+            background: linear-gradient(145deg, #0a0f1a 0%, #0c1220 100%);
         }
 
         .top-bar {
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(8px);
+            background: rgba(10, 20, 35, 0.85);
+            backdrop-filter: blur(12px);
             padding: 0.8rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #e2edf2;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
             position: sticky;
             top: 0;
             z-index: 10;
@@ -304,11 +334,57 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* FUTURISTIC DIGITAL CLOCK */
+        .clock-group {
+            display: flex;
+            gap: 24px;
+            background: linear-gradient(135deg, #0a1020, #0c1225);
+            padding: 8px 24px;
+            border-radius: 60px;
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05);
+            margin-left: 16px;
+        }
+        .clock-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .clock-label {
+            font-weight: 700;
+            color: #0ff;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 3px #0ff;
+        }
+        .clock-time {
+            font-weight: 800;
+            font-family: 'Orbitron', 'Courier New', monospace;
+            background: linear-gradient(135deg, #0ff, #ff44cc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(0,255,255,0.5);
+            line-height: 1;
+        }
+        .clock-ampm {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #ff44cc;
+            margin-left: 6px;
+            text-shadow: 0 0 3px rgba(255,68,204,0.5);
         }
 
         .menu-toggle {
-            background: #f1f5f9;
-            border: none;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.4);
             width: 40px;
             height: 40px;
             border-radius: 40px;
@@ -317,16 +393,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2c6e9e;
+            color: #0ff;
+            transition: all 0.2s;
+        }
+        .menu-toggle:hover {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0,255,255,0.3);
         }
 
         .logo-text {
             font-weight: 800;
             font-size: 1.2rem;
-            background: linear-gradient(135deg, #1f4662, #2b6a8f);
+            background: linear-gradient(135deg, #0ff, #ff44cc);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+            white-space: nowrap;
+            text-shadow: 0 0 5px rgba(0,255,255,0.3);
         }
 
         .action-buttons {
@@ -337,75 +420,71 @@
         }
 
         .icon-btn {
-            background: transparent;
-            border: none;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
             font-size: 0.85rem;
             padding: 8px 16px;
             border-radius: 40px;
             font-weight: 500;
             cursor: pointer;
-            background: #f1f5f9;
-            color: #2c4f6e;
+            color: #0ff;
             transition: all 0.2s;
         }
-
-        .icon-btn.primary {
-            background: #1e4a76;
-            color: white;
+        .icon-btn:hover {
+            background: rgba(0, 255, 255, 0.25);
+            box-shadow: 0 0 8px rgba(0,255,255,0.3);
         }
 
-        /* Dropdown Version History Button */
+        /* Dropdown */
         .version-dropdown {
             position: relative;
             display: inline-block;
         }
         .version-dropdown-btn {
-            background: #f1f5f9;
-            border: none;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
             font-size: 0.85rem;
             padding: 8px 16px;
             border-radius: 40px;
             font-weight: 500;
             cursor: pointer;
-            color: #2c4f6e;
+            color: #0ff;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.2s;
         }
         .version-dropdown-btn:hover {
-            background: #e2e8f0;
+            background: rgba(0, 255, 255, 0.25);
         }
         .version-dropdown-content {
             position: absolute;
             top: 110%;
             right: 0;
-            background: white;
+            background: #0f1825;
             min-width: 300px;
             max-height: 420px;
             overflow-y: auto;
             border-radius: 1rem;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             z-index: 100;
             display: none;
-            border: 1px solid #eef2f8;
+            border: 1px solid rgba(0, 255, 255, 0.3);
         }
         .version-dropdown-content.show {
             display: block;
         }
         .version-header-drop {
             padding: 0.8rem 1rem;
-            background: #fafcff;
-            border-bottom: 1px solid #edf2f7;
+            background: #0a1220;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
             font-size: 0.8rem;
-            color: #1e3a5f;
+            color: #0ff;
             position: sticky;
             top: 0;
-            background: white;
             z-index: 5;
         }
         .version-list-drop {
@@ -413,20 +492,20 @@
         }
         .version-item-drop {
             padding: 10px 12px;
-            background: #fefefe;
+            background: rgba(20, 30, 50, 0.8);
             border-radius: 12px;
             margin-bottom: 8px;
             cursor: pointer;
-            border: 1px solid #eff3f8;
+            border: 1px solid rgba(0, 255, 255, 0.2);
             transition: all 0.1s;
         }
         .version-item-drop:hover {
-            background: #f8fafd;
-            border-color: #cbd5e1;
+            background: rgba(0, 255, 255, 0.1);
+            border-color: #0ff;
         }
         .version-item-drop strong {
             font-size: 0.7rem;
-            color: #2c6e9e;
+            color: #0ff;
         }
         .clear-versions-drop {
             background: none;
@@ -435,13 +514,14 @@
             cursor: pointer;
             padding: 4px 8px;
             border-radius: 30px;
-            color: #94a3b8;
+            color: #ff6680;
         }
         .clear-versions-drop:hover {
-            color: #dc2626;
-            background: #fef2f2;
+            color: #ff44cc;
+            background: rgba(255,68,204,0.2);
         }
 
+        /* Flow Styling */
         .flow-wrapper {
             max-width: 950px;
             margin: 1.5rem auto;
@@ -454,15 +534,17 @@
         }
 
         .flow-step {
-            background: white;
+            background: rgba(18, 28, 45, 0.8);
             border-radius: 1.5rem;
             margin-bottom: 1.25rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            border: 1px solid #eef2f8;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
         }
 
         .flow-step.active {
-            border-left: 5px solid #2c9b6e;
+            border-left: 5px solid #0ff;
+            box-shadow: 0 0 15px rgba(0,255,255,0.2);
         }
 
         .step-header {
@@ -471,24 +553,24 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            background: #ffffff;
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 1.5rem;
         }
 
         .step-badge {
-            background: #eef2ff;
+            background: rgba(0, 255, 255, 0.15);
             padding: 6px 12px;
             border-radius: 40px;
             font-size: 0.7rem;
             font-weight: 600;
-            color: #2c6e9e;
+            color: #0ff;
         }
 
         .step-title {
             flex: 1;
             font-weight: 700;
             font-size: 1.1rem;
-            color: #1e2f3c;
+            color: #e0eaff;
         }
 
         .step-content {
@@ -501,26 +583,29 @@
         }
 
         .script-card {
-            background: #fefef9;
+            background: rgba(10, 18, 32, 0.9);
             border-radius: 1rem;
             padding: 1.2rem;
-            border: 1px solid #eef2f6;
+            border: 1px solid rgba(0, 255, 255, 0.2);
             font-size: 0.9rem;
             line-height: 1.6;
-            color: #1f3a46;
+            color: #c8d8ff;
             margin-bottom: 1rem;
             white-space: pre-wrap;
         }
 
         .small-btn {
-            background: #f1f5f9;
-            border: none;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
             padding: 5px 14px;
             border-radius: 30px;
             font-size: 0.7rem;
             font-weight: 500;
             cursor: pointer;
-            color: #2a577b;
+            color: #0ff;
+        }
+        .small-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
         }
 
         .choice-group {
@@ -537,12 +622,17 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            background: #f0f4f9;
-            color: #1e3a5f;
+            background: rgba(0, 255, 255, 0.1);
+            color: #0ff;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        .choice-pill:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 8px rgba(0,255,255,0.4);
         }
 
         .active-category-badge {
-            background: #e6f7ec;
+            background: rgba(255,68,204,0.2);
             border-radius: 40px;
             padding: 4px 12px;
             font-size: 0.7rem;
@@ -550,6 +640,7 @@
             align-items: center;
             gap: 5px;
             margin-left: 10px;
+            color: #ff44cc;
         }
 
         .toast-msg {
@@ -557,15 +648,17 @@
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1e2e3b;
-            color: white;
+            background: rgba(0, 255, 255, 0.9);
+            color: #0a0f1a;
             padding: 10px 28px;
             border-radius: 50px;
             font-size: 0.8rem;
+            font-weight: bold;
             opacity: 0;
             transition: 0.2s;
             pointer-events: none;
             z-index: 200;
+            box-shadow: 0 0 15px #0ff;
         }
 
         .nav-footer {
@@ -576,26 +669,34 @@
 
         .nav-footer button {
             flex: 1;
-            background: white;
-            border: 1px solid #dce5ef;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
             padding: 10px;
             border-radius: 60px;
             font-weight: 600;
             cursor: pointer;
+            color: #0ff;
+        }
+        .nav-footer button:hover {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(0,255,255,0.3);
         }
 
         @media (max-width: 800px) {
             .sidebar { width: 280px; }
-            .version-dropdown-content { right: 0; left: auto; min-width: 260px; }
+            .clock-time { font-size: 1.2rem; }
+            .clock-group { gap: 12px; padding: 4px 16px; }
+            .logo-text { font-size: 0.9rem; }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="app">
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>📌 Objection Handling Toolkit</h3>
-            <p>Pin important replies · Double-click text to edit</p>
+            <h3>⚡ Objection Handling Toolkit</h3>
+            <p>Pin replies · Drag notes (⋮⋮) up/down · Futuristic Flow</p>
         </div>
 
         <div class="notes-section">
@@ -604,7 +705,7 @@
                 <button class="add-note-btn" id="addNoteBtn" title="Add new note/script">+</button>
             </div>
             <div id="notesListContainer" class="notes-list">
-                <div class="empty-notes-message">✨ Click '+' to create a note or paste script. Click title to expand.</div>
+                <div class="empty-notes-message">✨ Click '+' to create a note. Drag using ⋮⋮ to reorder.</div>
             </div>
         </div>
 
@@ -616,9 +717,19 @@
             <div class="logo-area">
                 <button class="menu-toggle" id="toggleSidebarBtn">☰</button>
                 <span class="logo-text">Seek Marketing · Flow Script Studio</span>
+                <!-- FUTURISTIC LARGE CLOCK -->
+                <div class="clock-group" id="liveClockWidget">
+                    <div class="clock-item">
+                        <span class="clock-label">🇵🇭 PHT</span>
+                        <div><span id="phtTime" class="clock-time">--:--:--</span><span id="phtAmpm" class="clock-ampm">--</span></div>
+                    </div>
+                    <div class="clock-item">
+                        <span class="clock-label">🇬🇧 UK</span>
+                        <div><span id="ukTime" class="clock-time">--:--:--</span><span id="ukAmpm" class="clock-ampm">--</span></div>
+                    </div>
+                </div>
             </div>
             <div class="action-buttons">
-                <!-- Dropdown Version History Button -->
                 <div class="version-dropdown" id="versionDropdownContainer">
                     <button class="version-dropdown-btn" id="versionDropdownBtn">
                         📜 History ▼
@@ -629,7 +740,7 @@
                             <button id="clearVersionsDropdownBtn" class="clear-versions-drop" title="Clear all versions">🗑️ Clear</button>
                         </div>
                         <div id="versionListDropdown" class="version-list-drop">
-                            <div style="text-align:center; padding:20px; color:#94a3b8;">No versions yet</div>
+                            <div style="text-align:center; padding:20px; color:#5a6e8c;">No versions yet</div>
                         </div>
                     </div>
                 </div>
@@ -673,9 +784,7 @@
         { key: "value", title: "Value Proposition", badge: "💡 Tailored Solution", scriptKey: "value_ppc", isDynamic: true },
         { key: "close", title: "Soft Close / Appointment", badge: "📅 Next Step", scriptKey: "close" }
     ];
-    let currentStepIdx = 0;
-    let flowStepsElements = [];
-    let pinnedObjections = new Set();
+    let currentStepIdx = 0, flowStepsElements = [], pinnedObjections = new Set();
     let qualificationFlags = { "PPC/Ads": false, "SEO only": false, "Nothing/Unsure": false };
     let currentActiveCategory = "PPC/Ads";
     let customValueScripts = {
@@ -683,10 +792,9 @@
         "SEO only": ORIGINAL_SCRIPTS.value_seo,
         "Nothing/Unsure": ORIGINAL_SCRIPTS.value_nothing
     };
-    let versionHistory = [];
-    let notesArray = [];
+    let versionHistory = [], notesArray = [];
 
-    function showToast(msg) { const toast = document.getElementById('toastMsg'); toast.innerText = msg; toast.style.opacity = '1'; setTimeout(() => toast.style.opacity = '0', 2000); }
+    function showToast(msg) { const t=document.getElementById('toastMsg'); t.innerText=msg; t.style.opacity='1'; setTimeout(()=>t.style.opacity='0',2000); }
     function persistFullState() {
         const state = { scripts: {}, objections: {}, pinned: Array.from(pinnedObjections), qualificationFlags, currentActiveCategory, customValueScripts, versionHistory, notesArray };
         for (let step of stepsData) { const el = document.getElementById(`script_${step.key}`); if (el) state.scripts[step.key] = el.innerText; }
@@ -703,236 +811,69 @@
             if (data.qualificationFlags) qualificationFlags = data.qualificationFlags;
             if (data.pinned) pinnedObjections = new Set(data.pinned);
             if (data.versionHistory) versionHistory = data.versionHistory;
-            if (data.notesArray) notesArray = data.notesArray;
-            else notesArray = [];
+            if (data.notesArray) notesArray = data.notesArray; else notesArray = [];
             if (data.scripts) for (let [key, txt] of Object.entries(data.scripts)) { const el = document.getElementById(`script_${key}`); if (el && txt) el.innerText = txt; }
             const valueEl = document.getElementById(`script_value`);
             if (valueEl && customValueScripts[currentActiveCategory]) valueEl.innerText = customValueScripts[currentActiveCategory];
             if (data.objections) for (let [id, txt] of Object.entries(data.objections)) { const el = document.getElementById(`reply_${id}`); if (el && txt) el.innerText = txt; }
-            updatePinnedUI();
-            renderVersionHistoryDropdown();
-            renderNotesUI();
+            updatePinnedUI(); renderVersionHistoryDropdown(); renderNotesUI();
             return true;
         } catch(e) { return false; }
     }
-
     function updatePinnedUI() { document.querySelectorAll('.obj-card').forEach(card => { const id = card.dataset.objId; if (id && pinnedObjections.has(id)) card.classList.add('pinned'); else card.classList.remove('pinned'); }); }
-    
     function renderVersionHistoryDropdown() {
-        const dropdownContainer = document.getElementById('versionListDropdown');
-        if (!dropdownContainer) return;
-        if (versionHistory.length === 0) {
-            dropdownContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8;">✨ No versions saved yet</div>';
-            return;
-        }
-        dropdownContainer.innerHTML = versionHistory.map(v => `
-            <div class="version-item-drop" data-version-id="${v.id}">
-                <div><strong>🕒 ${v.timestamp}</strong></div>
-                <div style="font-size:0.7rem; color:#5c6f87;">${v.description}</div>
-            </div>
-        `).join('');
-        document.querySelectorAll('#versionListDropdown .version-item-drop').forEach(el => {
-            el.addEventListener('click', (e) => { 
-                e.stopPropagation(); 
-                const id = parseInt(el.dataset.versionId); 
-                const ver = versionHistory.find(v => v.id === id); 
-                if (ver) restoreSnapshot(ver);
-                document.getElementById('versionDropdownContent')?.classList.remove('show');
-            });
-        });
+        const c = document.getElementById('versionListDropdown'); if(!c) return;
+        if(!versionHistory.length){ c.innerHTML='<div style="text-align:center; padding:20px; color:#5a6e8c;">✨ No versions saved</div>'; return; }
+        c.innerHTML = versionHistory.map(v => `<div class="version-item-drop" data-version-id="${v.id}"><div><strong>🕒 ${v.timestamp}</strong></div><div style="font-size:0.7rem;">${v.description}</div></div>`).join('');
+        document.querySelectorAll('#versionListDropdown .version-item-drop').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); const id = parseInt(el.dataset.versionId); const ver = versionHistory.find(v=>v.id===id); if(ver) restoreSnapshot(ver); document.getElementById('versionDropdownContent')?.classList.remove('show'); }); });
     }
+    function restoreSnapshot(version) { /* keep original functionality */ const snap=version.snapshot; if(snap.scripts) for(let [key,text] of Object.entries(snap.scripts)){ const el=document.getElementById(`script_${key}`); if(el) el.innerText=text; } if(snap.customValueScripts) customValueScripts=snap.customValueScripts; if(snap.qualificationFlags) qualificationFlags=snap.qualificationFlags; if(snap.currentActiveCategory) currentActiveCategory=snap.currentActiveCategory; if(snap.objections) for(let [id,text] of Object.entries(snap.objections)){ const el=document.getElementById(`reply_${id}`); if(el) el.innerText=text; } if(snap.notesArray) notesArray=snap.notesArray; const vb=document.getElementById(`script_value`); if(vb&&customValueScripts[currentActiveCategory]) vb.innerText=customValueScripts[currentActiveCategory]; updatePinnedUI(); renderNotesUI(); persistFullState(); showToast(`Restored ${version.timestamp}`); renderVersionHistoryDropdown(); }
+    function createVersionSnapshot(desc) { const snapshot={scripts:{},customValueScripts:{...customValueScripts},qualificationFlags:{...qualificationFlags},currentActiveCategory,objections:{},notesArray:JSON.parse(JSON.stringify(notesArray))}; for(let step of stepsData){ const el=document.getElementById(`script_${step.key}`); if(el) snapshot.scripts[step.key]=el.innerText; } for(let obj of objectionsLibrary){ const replyDiv=document.getElementById(`reply_${obj.id}`); if(replyDiv) snapshot.objections[obj.id]=replyDiv.innerText; } versionHistory.unshift({id:Date.now(),timestamp:new Date().toLocaleString(),description:desc,snapshot}); if(versionHistory.length>30) versionHistory.pop(); persistFullState(); renderVersionHistoryDropdown(); showToast(`✅ ${desc}`); }
     
-    function restoreSnapshot(version) {
-        const snap = version.snapshot;
-        if (snap.scripts) for (let [key, text] of Object.entries(snap.scripts)) { const el = document.getElementById(`script_${key}`); if (el) el.innerText = text; }
-        if (snap.customValueScripts) customValueScripts = snap.customValueScripts;
-        if (snap.qualificationFlags) qualificationFlags = snap.qualificationFlags;
-        if (snap.currentActiveCategory) currentActiveCategory = snap.currentActiveCategory;
-        if (snap.objections) for (let [id, text] of Object.entries(snap.objections)) { const el = document.getElementById(`reply_${id}`); if (el) el.innerText = text; }
-        if (snap.notesArray) notesArray = snap.notesArray;
-        const valueBox = document.getElementById(`script_value`);
-        if (valueBox && customValueScripts[currentActiveCategory]) valueBox.innerText = customValueScripts[currentActiveCategory];
-        updatePinnedUI(); renderNotesUI(); persistFullState(); showToast(`Restored ${version.timestamp}`);
-        renderVersionHistoryDropdown();
-    }
+    // Drag & drop reorder (unchanged but essential)
+    function initDragAndDropNotes() { const container=document.getElementById('notesListContainer'); if(!container) return; let dragSrc=null; container.addEventListener('dragstart',(e)=>{ const card=e.target.closest('.note-card'); if(!card) return; dragSrc=card; e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',card.dataset.noteId); card.classList.add('dragging'); }); container.addEventListener('dragend',(e)=>{ const card=e.target.closest('.note-card'); if(card) card.classList.remove('dragging'); dragSrc=null; }); container.addEventListener('dragover',(e)=>{ e.preventDefault(); e.dataTransfer.dropEffect='move'; }); container.addEventListener('drop',(e)=>{ e.preventDefault(); const targetCard=e.target.closest('.note-card'); if(!targetCard||!dragSrc||dragSrc===targetCard) return; const dragId=parseInt(dragSrc.dataset.noteId), targetId=parseInt(targetCard.dataset.noteId); const dragIndex=notesArray.findIndex(n=>n.id===dragId), targetIndex=notesArray.findIndex(n=>n.id===targetId); if(dragIndex===-1||targetIndex===-1) return; const [movedNote]=notesArray.splice(dragIndex,1); notesArray.splice(targetIndex,0,movedNote); persistFullState(); renderNotesUI(); showToast("📌 Note reordered"); createVersionSnapshot("Reordered note"); }); }
+    function saveNote(noteId){ const note=notesArray.find(n=>n.id===noteId); if(!note) return; const titleInput=document.getElementById(`note-title-${noteId}`), contentDiv=document.getElementById(`note-content-${noteId}`); if(titleInput) note.title=titleInput.value.trim()||"Untitled Note"; if(contentDiv) note.content=contentDiv.innerText; persistFullState(); renderNotesUI(); showToast(`💾 Saved`); createVersionSnapshot(`Saved note`); }
+    function deleteNote(noteId){ if(confirm("Delete permanently?")){ notesArray=notesArray.filter(n=>n.id!==noteId); persistFullState(); renderNotesUI(); showToast("🗑️ Deleted"); createVersionSnapshot("Deleted note"); } }
+    function addNewNote(){ const newId=Date.now(); notesArray.unshift({id:newId,title:"New Script",content:"Paste or type script/note here. Double-click to edit."}); persistFullState(); renderNotesUI(); showToast("✏️ New note added"); createVersionSnapshot("Added note"); }
+    function makeNoteContentEditable(element,noteId){ if(element.getAttribute('contenteditable')==='true') return; element.setAttribute('contenteditable','true'); element.focus(); const saveEdit=()=>{ element.setAttribute('contenteditable','false'); const note=notesArray.find(n=>n.id===noteId); if(note){ note.content=element.innerText; persistFullState(); showToast("📝 Saved"); createVersionSnapshot(`Updated note`); } element.removeEventListener('blur',saveEdit); }; element.addEventListener('blur',saveEdit,{once:true}); }
+    function renderNotesUI(){ const container=document.getElementById('notesListContainer'); if(!container) return; if(!notesArray.length){ container.innerHTML=`<div class="empty-notes-message">📄 No notes yet. Click '+' to add.</div>`; return; } container.innerHTML=notesArray.map(note=>`<div class="note-card" data-note-id="${note.id}" draggable="true"><div class="note-title-bar" data-expand-id="${note.id}"><div class="note-title-left"><span class="drag-handle" draggable="false" title="Drag to reorder">⋮⋮</span><input type="text" id="note-title-${note.id}" class="note-title-input" value="${escapeHtml(note.title)}" style="background:transparent; border:none; font-weight:600; flex:1; outline:none; color:#0ff;"></div><div class="note-actions"><button class="note-icon-btn save-note-icon" data-note-id="${note.id}" title="Save">💾</button><button class="note-icon-btn delete-note-icon" data-note-id="${note.id}" title="Delete">🗑️</button><span class="expand-icon">▼</span></div></div><div id="note-content-${note.id}" class="note-content" contenteditable="false">${escapeHtml(note.content)}</div></div>`).join('');
+        notesArray.forEach(note=>{ const titleBar=document.querySelector(`.note-title-bar[data-expand-id="${note.id}"]`), contentDiv=document.getElementById(`note-content-${note.id}`), saveBtn=document.querySelector(`.save-note-icon[data-note-id="${note.id}"]`), delBtn=document.querySelector(`.delete-note-icon[data-note-id="${note.id}"]`), titleInput=document.getElementById(`note-title-${note.id}`); let expanded=false; if(titleBar) titleBar.addEventListener('click',(e)=>{ if(e.target.classList.contains('save-note-icon')||e.target.classList.contains('delete-note-icon')||e.target===titleInput||e.target.classList.contains('drag-handle')) return; expanded=!expanded; if(contentDiv) contentDiv.classList.toggle('show',expanded); }); if(saveBtn) saveBtn.addEventListener('click',(e)=>{ e.stopPropagation(); saveNote(note.id); }); if(delBtn) delBtn.addEventListener('click',(e)=>{ e.stopPropagation(); deleteNote(note.id); }); if(titleInput) titleInput.addEventListener('change',()=>saveNote(note.id)); if(contentDiv){ contentDiv.addEventListener('dblclick',()=>makeNoteContentEditable(contentDiv,note.id)); if(note.content.trim()!=="") contentDiv.classList.add('show'); } }); initDragAndDropNotes(); }
+    function escapeHtml(str){ return str.replace(/[&<>]/g,function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    function updateValuePropositionForCategory(category){ currentActiveCategory=category; const vb=document.getElementById(`script_value`); if(vb) vb.innerText=customValueScripts[category]; showToast(`📋 VP: ${category}`); persistFullState(); }
+    function handleQualification(choice){ const qb=document.getElementById(`script_qualify`); if(!qb) return; let followUp=""; if(choice==="PPC/Ads") followUp="\n\n👤 Rep: Great. Are you managing that in-house, or working with an agency?\n👤 Rep: Got you. And roughly, monthly ad spend around £1,000 or more?"; else if(choice==="SEO only") followUp="\n\n👤 Rep: Nice. In-house or agency?\n👤 Rep: And roughly, do you invest around £1,000+ per month in SEO?"; else followUp="\n\n👤 Rep: No worries, that actually makes this interesting — there’s usually low-hanging opportunities."; if(!qualificationFlags[choice]){ qb.innerText+=followUp; qualificationFlags[choice]=true; showToast(`✓ Added follow-up for ${choice}`); persistFullState(); } updateValuePropositionForCategory(choice); createVersionSnapshot(`Qualification: ${choice}`); goToStep(2); }
+    function makeEditable(element,isValueStep=false){ if(element.getAttribute('contenteditable')==='true') return; element.setAttribute('contenteditable','true'); element.focus(); const onBlur=()=>{ element.setAttribute('contenteditable','false'); if(isValueStep){ customValueScripts[currentActiveCategory]=element.innerText; showToast(`✏️ ${currentActiveCategory} saved`); } else persistFullState(); createVersionSnapshot("Script edited"); element.removeEventListener('blur',onBlur); }; element.addEventListener('blur',onBlur,{once:true}); }
+    function renderFlow(){ const container=document.getElementById('flowContainer'); container.innerHTML=''; flowStepsElements=[]; stepsData.forEach((step,idx)=>{ const stepDiv=document.createElement('div'); stepDiv.className='flow-step'; if(idx===currentStepIdx) stepDiv.classList.add('active'); const header=document.createElement('div'); header.className='step-header'; header.innerHTML=`<span class="step-badge">${step.badge}</span><span class="step-title">${step.title}</span><span>▼</span>`; const content=document.createElement('div'); content.className='step-content'; const scriptBox=document.createElement('div'); scriptBox.className='script-card'; scriptBox.id=`script_${step.key}`; scriptBox.setAttribute('contenteditable','false'); if(step.key==='value') scriptBox.innerText=customValueScripts[currentActiveCategory]; else scriptBox.innerText=ORIGINAL_SCRIPTS[step.scriptKey]||""; const btnRow=document.createElement('div'); btnRow.className='inline-buttons'; const editBtn=document.createElement('button'); editBtn.innerText='✏️ Edit Script'; editBtn.className='small-btn'; editBtn.addEventListener('click',(e)=>{ e.stopPropagation(); makeEditable(scriptBox,step.key==='value'); }); btnRow.appendChild(editBtn); if(step.hasChoices){ const choiceGroup=document.createElement('div'); choiceGroup.className='choice-group'; ["PPC/Ads","SEO only","Nothing/Unsure"].forEach(ch=>{ const chip=document.createElement('span'); chip.className='choice-pill'; chip.innerText=ch; chip.addEventListener('click',(e)=>{ e.stopPropagation(); handleQualification(ch); }); choiceGroup.appendChild(chip); }); btnRow.appendChild(choiceGroup); const badgeSpan=document.createElement('span'); badgeSpan.className='active-category-badge'; badgeSpan.id='activeVpBadge'; badgeSpan.innerHTML=`📌 Active: ${currentActiveCategory}`; btnRow.appendChild(badgeSpan); } content.appendChild(scriptBox); content.appendChild(btnRow); stepDiv.appendChild(header); stepDiv.appendChild(content); header.addEventListener('click',()=>goToStep(idx)); container.appendChild(stepDiv); flowStepsElements.push(stepDiv); }); document.querySelectorAll('.script-card').forEach(card=>{ const isValue=card.id==='script_value'; card.addEventListener('dblclick',()=>makeEditable(card,isValue)); }); const badge=document.getElementById('activeVpBadge'); if(badge) badge.innerHTML=`📌 Active: ${currentActiveCategory}`; }
+    function renderSidebar(){ const listDiv=document.getElementById('objectionsList'); listDiv.innerHTML=''; objectionsLibrary.forEach(obj=>{ const card=document.createElement('div'); card.className='obj-card'; card.dataset.objId=obj.id; if(pinnedObjections.has(obj.id)) card.classList.add('pinned'); const questionDiv=document.createElement('div'); questionDiv.className='obj-question'; const pinBtn=document.createElement('button'); pinBtn.innerHTML=pinnedObjections.has(obj.id)?'📍':'📌'; pinBtn.className='pin-icon'; pinBtn.addEventListener('click',(e)=>{ e.stopPropagation(); if(pinnedObjections.has(obj.id)) pinnedObjections.delete(obj.id); else pinnedObjections.add(obj.id); updatePinnedUI(); persistFullState(); showToast(pinnedObjections.has(obj.id)?"Pinned":"Unpinned"); }); questionDiv.innerHTML=`<span>${obj.question}</span>`; questionDiv.appendChild(pinBtn); const answerDiv=document.createElement('div'); answerDiv.className='obj-answer'; answerDiv.id=`reply_${obj.id}`; answerDiv.innerText=obj.reply; answerDiv.setAttribute('contenteditable','false'); let expanded=false; questionDiv.addEventListener('click',(e)=>{ if(e.target===pinBtn) return; expanded=!expanded; answerDiv.classList.toggle('show',expanded); }); answerDiv.addEventListener('dblclick',()=>{ if(answerDiv.getAttribute('contenteditable')==='true') return; answerDiv.setAttribute('contenteditable','true'); answerDiv.focus(); answerDiv.addEventListener('blur',()=>{ answerDiv.setAttribute('contenteditable','false'); persistFullState(); showToast('Objection saved'); },{once:true}); }); card.appendChild(questionDiv); card.appendChild(answerDiv); listDiv.appendChild(card); }); }
+    function goToStep(index){ if(index<0) index=0; if(index>=stepsData.length) index=stepsData.length-1; currentStepIdx=index; flowStepsElements.forEach((el,i)=>{ if(i===currentStepIdx) el.classList.add('active'); else el.classList.remove('active'); }); }
+    function resetToFactory(){ if(confirm("Reset all scripts & notes to factory?")){ for(let step of stepsData){ const el=document.getElementById(`script_${step.key}`); if(el){ if(step.key==='value'){ customValueScripts={"PPC/Ads":ORIGINAL_SCRIPTS.value_ppc,"SEO only":ORIGINAL_SCRIPTS.value_seo,"Nothing/Unsure":ORIGINAL_SCRIPTS.value_nothing}; el.innerText=customValueScripts[currentActiveCategory]; } else el.innerText=ORIGINAL_SCRIPTS[step.scriptKey]; } } for(let obj of objectionsLibrary){ const replyDiv=document.getElementById(`reply_${obj.id}`); if(replyDiv) replyDiv.innerText=obj.reply; } qualificationFlags={"PPC/Ads":false,"SEO only":false,"Nothing/Unsure":false}; pinnedObjections.clear(); currentActiveCategory="PPC/Ads"; notesArray=[]; persistFullState(); renderNotesUI(); updatePinnedUI(); showToast('🏭 Factory reset'); createVersionSnapshot("Factory reset"); } }
     
-    function createVersionSnapshot(desc) {
-        const snapshot = { scripts: {}, customValueScripts: { ...customValueScripts }, qualificationFlags: { ...qualificationFlags }, currentActiveCategory, objections: {}, notesArray: JSON.parse(JSON.stringify(notesArray)) };
-        for (let step of stepsData) { const el = document.getElementById(`script_${step.key}`); if (el) snapshot.scripts[step.key] = el.innerText; }
-        for (let obj of objectionsLibrary) { const replyDiv = document.getElementById(`reply_${obj.id}`); if (replyDiv) snapshot.objections[obj.id] = replyDiv.innerText; }
-        versionHistory.unshift({ id: Date.now(), timestamp: new Date().toLocaleString(), description: desc, snapshot });
-        if (versionHistory.length > 30) versionHistory.pop();
-        persistFullState(); renderVersionHistoryDropdown(); showToast(`✅ ${desc}`);
-    }
-
-    // Notes functions
-    function saveNote(noteId) {
-        const note = notesArray.find(n => n.id === noteId);
-        if (!note) return;
-        const titleInput = document.getElementById(`note-title-${noteId}`);
-        const contentDiv = document.getElementById(`note-content-${noteId}`);
-        if (titleInput) note.title = titleInput.value.trim() || "Untitled Note";
-        if (contentDiv) note.content = contentDiv.innerText;
-        persistFullState();
-        renderNotesUI();
-        showToast(`💾 Note "${note.title}" saved`);
-        createVersionSnapshot(`Saved note: ${note.title}`);
-    }
-    function deleteNote(noteId) {
-        if (confirm("Delete this note/script permanently?")) {
-            notesArray = notesArray.filter(n => n.id !== noteId);
-            persistFullState();
-            renderNotesUI();
-            showToast("🗑️ Note deleted");
-            createVersionSnapshot("Deleted a note");
-        }
-    }
-    function addNewNote() {
-        const newId = Date.now();
-        notesArray.unshift({ id: newId, title: "New Script", content: "Paste or type your script/note here. Double-click content to edit. Click title to expand/collapse." });
-        persistFullState();
-        renderNotesUI();
-        showToast("✏️ New note added. Click title to expand & edit.");
-        createVersionSnapshot("Added new note");
-    }
-    function makeNoteContentEditable(element, noteId) {
-        if (element.getAttribute('contenteditable') === 'true') return;
-        element.setAttribute('contenteditable', 'true');
-        element.focus();
-        const saveEdit = () => {
-            element.setAttribute('contenteditable', 'false');
-            const note = notesArray.find(n => n.id === noteId);
-            if (note) { note.content = element.innerText; persistFullState(); showToast("📝 Note content saved"); createVersionSnapshot(`Updated note: ${note.title}`); }
-            element.removeEventListener('blur', saveEdit);
-        };
-        element.addEventListener('blur', saveEdit, { once: true });
-    }
-    function renderNotesUI() {
-        const container = document.getElementById('notesListContainer');
-        if (!container) return;
-        if (!notesArray.length) {
-            container.innerHTML = `<div class="empty-notes-message">📄 No notes yet. Click '+' to paste script or add note.</div>`;
-            return;
-        }
-        container.innerHTML = notesArray.map(note => `
-            <div class="note-card" data-note-id="${note.id}">
-                <div class="note-title-bar" data-expand-id="${note.id}">
-                    <input type="text" id="note-title-${note.id}" class="note-title-input" value="${escapeHtml(note.title)}" style="background:transparent; border:none; font-weight:600; flex:1; outline:none;" maxlength="60">
-                    <div class="note-actions">
-                        <button class="note-icon-btn save-note-icon" data-note-id="${note.id}" title="Save Note">💾</button>
-                        <button class="note-icon-btn delete-note-icon" data-note-id="${note.id}" title="Delete Note">🗑️</button>
-                        <span class="expand-icon">▼</span>
-                    </div>
-                </div>
-                <div id="note-content-${note.id}" class="note-content" contenteditable="false">${escapeHtml(note.content)}</div>
-            </div>
-        `).join('');
-        notesArray.forEach(note => {
-            const titleBar = document.querySelector(`.note-title-bar[data-expand-id="${note.id}"]`);
-            const contentDiv = document.getElementById(`note-content-${note.id}`);
-            const saveBtn = document.querySelector(`.save-note-icon[data-note-id="${note.id}"]`);
-            const delBtn = document.querySelector(`.delete-note-icon[data-note-id="${note.id}"]`);
-            const titleInput = document.getElementById(`note-title-${note.id}`);
-            let expanded = false;
-            if (titleBar) {
-                titleBar.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('save-note-icon') || e.target.classList.contains('delete-note-icon') || e.target === titleInput) return;
-                    expanded = !expanded;
-                    if (contentDiv) contentDiv.classList.toggle('show', expanded);
-                });
-            }
-            if (saveBtn) saveBtn.addEventListener('click', (e) => { e.stopPropagation(); saveNote(note.id); });
-            if (delBtn) delBtn.addEventListener('click', (e) => { e.stopPropagation(); deleteNote(note.id); });
-            if (titleInput) titleInput.addEventListener('change', (e) => { e.stopPropagation(); saveNote(note.id); });
-            if (contentDiv) {
-                contentDiv.addEventListener('dblclick', (e) => { e.stopPropagation(); makeNoteContentEditable(contentDiv, note.id); });
-                if (note.content.trim() !== "") contentDiv.classList.add('show');
-            }
-        });
-    }
-    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }); }
-
-    // Flow helpers
-    function updateValuePropositionForCategory(category) { currentActiveCategory = category; const valueBox = document.getElementById(`script_value`); if(valueBox) valueBox.innerText = customValueScripts[category]; showToast(`📋 VP: ${category}`); persistFullState(); }
-    function handleQualification(choice) {
-        const qualifyBox = document.getElementById(`script_qualify`); if(!qualifyBox) return;
-        let followUp = "";
-        if (choice === "PPC/Ads") followUp = "\n\n👤 Rep: Great. Are you managing that in-house, or working with an agency?\n👤 Rep: Got you. And roughly, monthly ad spend around £1,000 or more?";
-        else if (choice === "SEO only") followUp = "\n\n👤 Rep: Nice. In-house or agency?\n👤 Rep: And roughly, do you invest around £1,000+ per month in SEO?";
-        else followUp = "\n\n👤 Rep: No worries, that actually makes this interesting — there’s usually low-hanging opportunities.";
-        if (!qualificationFlags[choice]) { qualifyBox.innerText += followUp; qualificationFlags[choice] = true; showToast(`✓ Added follow-up for ${choice}`); persistFullState(); }
-        updateValuePropositionForCategory(choice);
-        createVersionSnapshot(`Qualification: ${choice}`);
-        goToStep(2);
-    }
-    function makeEditable(element, isValueStep = false) {
-        if (element.getAttribute('contenteditable') === 'true') return;
-        element.setAttribute('contenteditable', 'true'); element.focus();
-        const onBlur = () => { element.setAttribute('contenteditable', 'false'); if(isValueStep) { customValueScripts[currentActiveCategory] = element.innerText; showToast(`✏️ ${currentActiveCategory} saved`); } else persistFullState(); createVersionSnapshot("Script edited"); element.removeEventListener('blur', onBlur); };
-        element.addEventListener('blur', onBlur, { once: true });
-    }
-    function renderFlow() {
-        const container = document.getElementById('flowContainer'); container.innerHTML = ''; flowStepsElements = [];
-        stepsData.forEach((step, idx) => {
-            const stepDiv = document.createElement('div'); stepDiv.className = 'flow-step'; if(idx === currentStepIdx) stepDiv.classList.add('active');
-            const header = document.createElement('div'); header.className = 'step-header'; header.innerHTML = `<span class="step-badge">${step.badge}</span><span class="step-title">${step.title}</span><span>▼</span>`;
-            const content = document.createElement('div'); content.className = 'step-content';
-            const scriptBox = document.createElement('div'); scriptBox.className = 'script-card'; scriptBox.id = `script_${step.key}`; scriptBox.setAttribute('contenteditable', 'false');
-            if (step.key === 'value') scriptBox.innerText = customValueScripts[currentActiveCategory]; else scriptBox.innerText = ORIGINAL_SCRIPTS[step.scriptKey] || "";
-            const btnRow = document.createElement('div'); btnRow.className = 'inline-buttons';
-            const editBtn = document.createElement('button'); editBtn.innerText = '✏️ Edit Script'; editBtn.className = 'small-btn'; editBtn.addEventListener('click', (e) => { e.stopPropagation(); makeEditable(scriptBox, step.key === 'value'); });
-            btnRow.appendChild(editBtn);
-            if(step.hasChoices) {
-                const choiceGroup = document.createElement('div'); choiceGroup.className = 'choice-group';
-                ["PPC/Ads","SEO only","Nothing/Unsure"].forEach(ch => { const chip = document.createElement('span'); chip.className = 'choice-pill'; chip.innerText = ch; chip.addEventListener('click', (e) => { e.stopPropagation(); handleQualification(ch); }); choiceGroup.appendChild(chip); });
-                btnRow.appendChild(choiceGroup);
-                const badgeSpan = document.createElement('span'); badgeSpan.className = 'active-category-badge'; badgeSpan.id = 'activeVpBadge'; badgeSpan.innerHTML = `📌 Active: ${currentActiveCategory}`; btnRow.appendChild(badgeSpan);
-            }
-            content.appendChild(scriptBox); content.appendChild(btnRow); stepDiv.appendChild(header); stepDiv.appendChild(content);
-            header.addEventListener('click', () => goToStep(idx)); container.appendChild(stepDiv); flowStepsElements.push(stepDiv);
-        });
-        document.querySelectorAll('.script-card').forEach(card => { const isValue = card.id === 'script_value'; card.addEventListener('dblclick', (e) => { e.stopPropagation(); makeEditable(card, isValue); }); });
-        const badge = document.getElementById('activeVpBadge'); if(badge) badge.innerHTML = `📌 Active: ${currentActiveCategory}`;
-    }
-    function renderSidebar() {
-        const listDiv = document.getElementById('objectionsList'); listDiv.innerHTML = '';
-        objectionsLibrary.forEach(obj => {
-            const card = document.createElement('div'); card.className = 'obj-card'; card.dataset.objId = obj.id; if(pinnedObjections.has(obj.id)) card.classList.add('pinned');
-            const questionDiv = document.createElement('div'); questionDiv.className = 'obj-question';
-            const pinBtn = document.createElement('button'); pinBtn.innerHTML = pinnedObjections.has(obj.id) ? '📍' : '📌'; pinBtn.className = 'pin-icon'; pinBtn.addEventListener('click', (e) => { e.stopPropagation(); if(pinnedObjections.has(obj.id)) pinnedObjections.delete(obj.id); else pinnedObjections.add(obj.id); updatePinnedUI(); persistFullState(); showToast(pinnedObjections.has(obj.id) ? "Pinned" : "Unpinned"); });
-            questionDiv.innerHTML = `<span>${obj.question}</span>`; questionDiv.appendChild(pinBtn);
-            const answerDiv = document.createElement('div'); answerDiv.className = 'obj-answer'; answerDiv.id = `reply_${obj.id}`; answerDiv.innerText = obj.reply; answerDiv.setAttribute('contenteditable', 'false');
-            let expanded = false; questionDiv.addEventListener('click', (e) => { if(e.target === pinBtn) return; expanded = !expanded; answerDiv.classList.toggle('show', expanded); });
-            answerDiv.addEventListener('dblclick', () => { if(answerDiv.getAttribute('contenteditable') === 'true') return; answerDiv.setAttribute('contenteditable', 'true'); answerDiv.focus(); answerDiv.addEventListener('blur', () => { answerDiv.setAttribute('contenteditable', 'false'); persistFullState(); showToast('Objection saved'); }, { once: true }); });
-            card.appendChild(questionDiv); card.appendChild(answerDiv); listDiv.appendChild(card);
-        });
-    }
-    function goToStep(index) { if(index<0) index=0; if(index>=stepsData.length) index=stepsData.length-1; currentStepIdx=index; flowStepsElements.forEach((el,i)=> { if(i===currentStepIdx) el.classList.add('active'); else el.classList.remove('active'); }); }
-    function resetToFactory() {
-        if(confirm("Reset all scripts & notes to factory? Version history stays.")) {
-            for(let step of stepsData) { const el = document.getElementById(`script_${step.key}`); if(el) { if(step.key === 'value') { customValueScripts = { "PPC/Ads": ORIGINAL_SCRIPTS.value_ppc, "SEO only": ORIGINAL_SCRIPTS.value_seo, "Nothing/Unsure": ORIGINAL_SCRIPTS.value_nothing }; el.innerText = customValueScripts[currentActiveCategory]; } else el.innerText = ORIGINAL_SCRIPTS[step.scriptKey]; } }
-            for(let obj of objectionsLibrary) { const replyDiv = document.getElementById(`reply_${obj.id}`); if(replyDiv) replyDiv.innerText = obj.reply; }
-            qualificationFlags = { "PPC/Ads": false, "SEO only": false, "Nothing/Unsure": false }; pinnedObjections.clear(); currentActiveCategory = "PPC/Ads"; notesArray = []; persistFullState(); renderNotesUI(); updatePinnedUI(); showToast('🏭 Factory reset complete'); createVersionSnapshot("Factory reset");
-        }
-    }
-
-    function init() {
-        renderFlow(); renderSidebar(); loadFullState(); goToStep(0);
-        document.getElementById('toggleSidebarBtn').addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('collapsed'); });
-        document.getElementById('prevStepBtn').addEventListener('click', () => goToStep(currentStepIdx-1));
-        document.getElementById('nextStepBtn').addEventListener('click', () => goToStep(currentStepIdx+1));
-        document.getElementById('saveVersionBtn').addEventListener('click', () => createVersionSnapshot("Manual snapshot"));
-        document.getElementById('globalResetBtn').addEventListener('click', resetToFactory);
-        document.getElementById('addNoteBtn').addEventListener('click', addNewNote);
+    // Real-time 12h clock with am/pm
+    function updateClocks() {
+        const now = new Date();
+        const phtDate = new Date(now.getTime() + (8 * 60 * 60 * 1000));
+        let phtHours = phtDate.getUTCHours();
+        let phtMinutes = phtDate.getUTCMinutes();
+        let phtSeconds = phtDate.getUTCSeconds();
+        let phtAmpm = phtHours >= 12 ? 'PM' : 'AM';
+        phtHours = phtHours % 12 || 12;
+        const phtTimeStr = `${phtHours.toString().padStart(2,'0')}:${phtMinutes.toString().padStart(2,'0')}:${phtSeconds.toString().padStart(2,'0')}`;
+        document.getElementById('phtTime').innerText = phtTimeStr;
+        document.getElementById('phtAmpm').innerText = phtAmpm;
         
-        const dropdownBtn = document.getElementById('versionDropdownBtn');
-        const dropdownContent = document.getElementById('versionDropdownContent');
-        dropdownBtn.addEventListener('click', (e) => { e.stopPropagation(); dropdownContent.classList.toggle('show'); });
-        document.addEventListener('click', (e) => { if (!dropdownBtn.contains(e.target) && !dropdownContent.contains(e.target)) dropdownContent.classList.remove('show'); });
-        const clearDropdown = document.getElementById('clearVersionsDropdownBtn');
-        if(clearDropdown) clearDropdown.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Clear all versions?")){ versionHistory=[]; persistFullState(); renderVersionHistoryDropdown(); showToast("Versions cleared"); dropdownContent.classList.remove('show'); } });
-        window.addEventListener('beforeunload', () => persistFullState());
+        const ukDate = new Date(now.toLocaleString("en-US", {timeZone: "Europe/London"}));
+        let ukHours = ukDate.getHours();
+        let ukMinutes = ukDate.getMinutes();
+        let ukSeconds = ukDate.getSeconds();
+        let ukAmpm = ukHours >= 12 ? 'PM' : 'AM';
+        ukHours = ukHours % 12 || 12;
+        const ukTimeStr = `${ukHours.toString().padStart(2,'0')}:${ukMinutes.toString().padStart(2,'0')}:${ukSeconds.toString().padStart(2,'0')}`;
+        document.getElementById('ukTime').innerText = ukTimeStr;
+        document.getElementById('ukAmpm').innerText = ukAmpm;
     }
+    setInterval(updateClocks, 1000);
+    updateClocks();
+
+    function init(){ renderFlow(); renderSidebar(); loadFullState(); goToStep(0); document.getElementById('toggleSidebarBtn').addEventListener('click',()=>{ document.getElementById('sidebar').classList.toggle('collapsed'); }); document.getElementById('prevStepBtn').addEventListener('click',()=>goToStep(currentStepIdx-1)); document.getElementById('nextStepBtn').addEventListener('click',()=>goToStep(currentStepIdx+1)); document.getElementById('saveVersionBtn').addEventListener('click',()=>createVersionSnapshot("Manual snapshot")); document.getElementById('globalResetBtn').addEventListener('click',resetToFactory); document.getElementById('addNoteBtn').addEventListener('click',addNewNote); const dropdownBtn=document.getElementById('versionDropdownBtn'); const dropdownContent=document.getElementById('versionDropdownContent'); dropdownBtn.addEventListener('click',(e)=>{ e.stopPropagation(); dropdownContent.classList.toggle('show'); }); document.addEventListener('click',(e)=>{ if(!dropdownBtn.contains(e.target)&&!dropdownContent.contains(e.target)) dropdownContent.classList.remove('show'); }); const clearDropdown=document.getElementById('clearVersionsDropdownBtn'); if(clearDropdown) clearDropdown.addEventListener('click',(e)=>{ e.stopPropagation(); if(confirm("Clear all versions?")){ versionHistory=[]; persistFullState(); renderVersionHistoryDropdown(); showToast("Versions cleared"); dropdownContent.classList.remove('show'); } }); window.addEventListener('beforeunload',()=>persistFullState()); }
     init();
 </script>
 </body>
