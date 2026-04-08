@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Seek Marketing | Flow Script Studio — NoteForge Edition</title>
+    <!-- Favicon - simple chat/flow icon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0f1a'/%3E%3Cpath d='M30 35 L70 35 L70 65 L55 65 L50 75 L45 65 L30 65 Z' fill='%230ff' stroke='%230ff' stroke-width='2'/%3E%3Ccircle cx='45' cy='50' r='3' fill='%230a0f1a'/%3E%3Ccircle cx='55' cy='50' r='3' fill='%230a0f1a'/%3E%3C/svg%3E">
     <style>
         * {
             margin: 0;
@@ -435,40 +437,43 @@
             box-shadow: 0 0 8px rgba(0,255,255,0.3);
         }
 
-        /* Dropdown */
+        /* History Dropdown - improved positioning & visibility */
         .version-dropdown {
             position: relative;
             display: inline-block;
         }
         .version-dropdown-btn {
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(0, 255, 255, 0.15);
+            border: 1px solid rgba(0, 255, 255, 0.5);
             font-size: 0.85rem;
             padding: 8px 16px;
             border-radius: 40px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             color: #0ff;
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.2s;
         }
         .version-dropdown-btn:hover {
-            background: rgba(0, 255, 255, 0.25);
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0,255,255,0.4);
         }
         .version-dropdown-content {
             position: absolute;
             top: 110%;
             right: 0;
             background: #0f1825;
-            min-width: 300px;
-            max-height: 420px;
+            min-width: 340px;
+            max-height: 450px;
             overflow-y: auto;
             border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 100;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            z-index: 1000;
             display: none;
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
         }
         .version-dropdown-content.show {
             display: block;
@@ -476,49 +481,57 @@
         .version-header-drop {
             padding: 0.8rem 1rem;
             background: #0a1220;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 600;
-            font-size: 0.8rem;
+            font-weight: 700;
+            font-size: 0.85rem;
             color: #0ff;
             position: sticky;
             top: 0;
             z-index: 5;
         }
         .version-list-drop {
-            padding: 0.5rem;
+            padding: 0.6rem;
         }
         .version-item-drop {
-            padding: 10px 12px;
-            background: rgba(20, 30, 50, 0.8);
-            border-radius: 12px;
-            margin-bottom: 8px;
+            padding: 12px 14px;
+            background: rgba(20, 30, 50, 0.9);
+            border-radius: 14px;
+            margin-bottom: 10px;
             cursor: pointer;
             border: 1px solid rgba(0, 255, 255, 0.2);
-            transition: all 0.1s;
+            transition: all 0.15s;
         }
         .version-item-drop:hover {
-            background: rgba(0, 255, 255, 0.1);
+            background: rgba(0, 255, 255, 0.15);
             border-color: #0ff;
+            transform: translateX(3px);
         }
         .version-item-drop strong {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #0ff;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .version-item-drop div:last-child {
+            font-size: 0.7rem;
+            color: #aac8ff;
         }
         .clear-versions-drop {
-            background: none;
-            border: none;
-            font-size: 1rem;
+            background: rgba(255,68,204,0.2);
+            border: 1px solid rgba(255,68,204,0.4);
+            font-size: 0.75rem;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 5px 12px;
             border-radius: 30px;
-            color: #ff6680;
+            color: #ff88cc;
+            transition: all 0.2s;
         }
         .clear-versions-drop:hover {
-            color: #ff44cc;
-            background: rgba(255,68,204,0.2);
+            background: rgba(255,68,204,0.4);
+            color: white;
         }
 
         /* Flow Styling */
@@ -687,6 +700,7 @@
             .clock-time { font-size: 1.2rem; }
             .clock-group { gap: 12px; padding: 4px 16px; }
             .logo-text { font-size: 0.9rem; }
+            .version-dropdown-content { min-width: 280px; right: -20px; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800&display=swap" rel="stylesheet">
@@ -730,6 +744,9 @@
                 </div>
             </div>
             <div class="action-buttons">
+                <!-- Save Version button -->
+                <button class="icon-btn" id="saveVersionBtn">📸 Save Version</button>
+                <!-- HISTORY BUTTON - positioned right before Reset Factory -->
                 <div class="version-dropdown" id="versionDropdownContainer">
                     <button class="version-dropdown-btn" id="versionDropdownBtn">
                         📜 History ▼
@@ -737,14 +754,14 @@
                     <div class="version-dropdown-content" id="versionDropdownContent">
                         <div class="version-header-drop">
                             <span>📜 Version History</span>
-                            <button id="clearVersionsDropdownBtn" class="clear-versions-drop" title="Clear all versions">🗑️ Clear</button>
+                            <button id="clearVersionsDropdownBtn" class="clear-versions-drop" title="Clear all versions">🗑️ Clear All</button>
                         </div>
                         <div id="versionListDropdown" class="version-list-drop">
                             <div style="text-align:center; padding:20px; color:#5a6e8c;">No versions yet</div>
                         </div>
                     </div>
                 </div>
-                <button class="icon-btn" id="saveVersionBtn">📸 Save Version</button>
+                <!-- Reset Factory button -->
                 <button class="icon-btn" id="globalResetBtn">⟳ Reset Factory</button>
             </div>
         </div>
@@ -761,7 +778,7 @@
 <div id="toastMsg" class="toast-msg"></div>
 
 <script>
-    // ======================= CORE ORIGINAL SCRIPT LOGIC =======================
+    // ======================= CORE SCRIPT LOGIC (unchanged behavior) =======================
     const ORIGINAL_SCRIPTS = {
         hook: `Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a nosey at your company profile and had a couple of quick questions… Do you have a minute?\n(Pause and listen — let them say yes/no.)\n\n"Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could potentially improve your website traffic and ROI."`,
         qualify: `Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?`,
@@ -824,13 +841,13 @@
     function renderVersionHistoryDropdown() {
         const c = document.getElementById('versionListDropdown'); if(!c) return;
         if(!versionHistory.length){ c.innerHTML='<div style="text-align:center; padding:20px; color:#5a6e8c;">✨ No versions saved</div>'; return; }
-        c.innerHTML = versionHistory.map(v => `<div class="version-item-drop" data-version-id="${v.id}"><div><strong>🕒 ${v.timestamp}</strong></div><div style="font-size:0.7rem;">${v.description}</div></div>`).join('');
+        c.innerHTML = versionHistory.map(v => `<div class="version-item-drop" data-version-id="${v.id}"><strong>🕒 ${v.timestamp}</strong><div>${v.description}</div></div>`).join('');
         document.querySelectorAll('#versionListDropdown .version-item-drop').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); const id = parseInt(el.dataset.versionId); const ver = versionHistory.find(v=>v.id===id); if(ver) restoreSnapshot(ver); document.getElementById('versionDropdownContent')?.classList.remove('show'); }); });
     }
-    function restoreSnapshot(version) { /* keep original functionality */ const snap=version.snapshot; if(snap.scripts) for(let [key,text] of Object.entries(snap.scripts)){ const el=document.getElementById(`script_${key}`); if(el) el.innerText=text; } if(snap.customValueScripts) customValueScripts=snap.customValueScripts; if(snap.qualificationFlags) qualificationFlags=snap.qualificationFlags; if(snap.currentActiveCategory) currentActiveCategory=snap.currentActiveCategory; if(snap.objections) for(let [id,text] of Object.entries(snap.objections)){ const el=document.getElementById(`reply_${id}`); if(el) el.innerText=text; } if(snap.notesArray) notesArray=snap.notesArray; const vb=document.getElementById(`script_value`); if(vb&&customValueScripts[currentActiveCategory]) vb.innerText=customValueScripts[currentActiveCategory]; updatePinnedUI(); renderNotesUI(); persistFullState(); showToast(`Restored ${version.timestamp}`); renderVersionHistoryDropdown(); }
+    function restoreSnapshot(version) { const snap=version.snapshot; if(snap.scripts) for(let [key,text] of Object.entries(snap.scripts)){ const el=document.getElementById(`script_${key}`); if(el) el.innerText=text; } if(snap.customValueScripts) customValueScripts=snap.customValueScripts; if(snap.qualificationFlags) qualificationFlags=snap.qualificationFlags; if(snap.currentActiveCategory) currentActiveCategory=snap.currentActiveCategory; if(snap.objections) for(let [id,text] of Object.entries(snap.objections)){ const el=document.getElementById(`reply_${id}`); if(el) el.innerText=text; } if(snap.notesArray) notesArray=snap.notesArray; const vb=document.getElementById(`script_value`); if(vb&&customValueScripts[currentActiveCategory]) vb.innerText=customValueScripts[currentActiveCategory]; updatePinnedUI(); renderNotesUI(); persistFullState(); showToast(`Restored ${version.timestamp}`); renderVersionHistoryDropdown(); }
     function createVersionSnapshot(desc) { const snapshot={scripts:{},customValueScripts:{...customValueScripts},qualificationFlags:{...qualificationFlags},currentActiveCategory,objections:{},notesArray:JSON.parse(JSON.stringify(notesArray))}; for(let step of stepsData){ const el=document.getElementById(`script_${step.key}`); if(el) snapshot.scripts[step.key]=el.innerText; } for(let obj of objectionsLibrary){ const replyDiv=document.getElementById(`reply_${obj.id}`); if(replyDiv) snapshot.objections[obj.id]=replyDiv.innerText; } versionHistory.unshift({id:Date.now(),timestamp:new Date().toLocaleString(),description:desc,snapshot}); if(versionHistory.length>30) versionHistory.pop(); persistFullState(); renderVersionHistoryDropdown(); showToast(`✅ ${desc}`); }
     
-    // Drag & drop reorder (unchanged but essential)
+    // Drag & drop and notes functions (original)
     function initDragAndDropNotes() { const container=document.getElementById('notesListContainer'); if(!container) return; let dragSrc=null; container.addEventListener('dragstart',(e)=>{ const card=e.target.closest('.note-card'); if(!card) return; dragSrc=card; e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',card.dataset.noteId); card.classList.add('dragging'); }); container.addEventListener('dragend',(e)=>{ const card=e.target.closest('.note-card'); if(card) card.classList.remove('dragging'); dragSrc=null; }); container.addEventListener('dragover',(e)=>{ e.preventDefault(); e.dataTransfer.dropEffect='move'; }); container.addEventListener('drop',(e)=>{ e.preventDefault(); const targetCard=e.target.closest('.note-card'); if(!targetCard||!dragSrc||dragSrc===targetCard) return; const dragId=parseInt(dragSrc.dataset.noteId), targetId=parseInt(targetCard.dataset.noteId); const dragIndex=notesArray.findIndex(n=>n.id===dragId), targetIndex=notesArray.findIndex(n=>n.id===targetId); if(dragIndex===-1||targetIndex===-1) return; const [movedNote]=notesArray.splice(dragIndex,1); notesArray.splice(targetIndex,0,movedNote); persistFullState(); renderNotesUI(); showToast("📌 Note reordered"); createVersionSnapshot("Reordered note"); }); }
     function saveNote(noteId){ const note=notesArray.find(n=>n.id===noteId); if(!note) return; const titleInput=document.getElementById(`note-title-${noteId}`), contentDiv=document.getElementById(`note-content-${noteId}`); if(titleInput) note.title=titleInput.value.trim()||"Untitled Note"; if(contentDiv) note.content=contentDiv.innerText; persistFullState(); renderNotesUI(); showToast(`💾 Saved`); createVersionSnapshot(`Saved note`); }
     function deleteNote(noteId){ if(confirm("Delete permanently?")){ notesArray=notesArray.filter(n=>n.id!==noteId); persistFullState(); renderNotesUI(); showToast("🗑️ Deleted"); createVersionSnapshot("Deleted note"); } }
@@ -847,7 +864,6 @@
     function goToStep(index){ if(index<0) index=0; if(index>=stepsData.length) index=stepsData.length-1; currentStepIdx=index; flowStepsElements.forEach((el,i)=>{ if(i===currentStepIdx) el.classList.add('active'); else el.classList.remove('active'); }); }
     function resetToFactory(){ if(confirm("Reset all scripts & notes to factory?")){ for(let step of stepsData){ const el=document.getElementById(`script_${step.key}`); if(el){ if(step.key==='value'){ customValueScripts={"PPC/Ads":ORIGINAL_SCRIPTS.value_ppc,"SEO only":ORIGINAL_SCRIPTS.value_seo,"Nothing/Unsure":ORIGINAL_SCRIPTS.value_nothing}; el.innerText=customValueScripts[currentActiveCategory]; } else el.innerText=ORIGINAL_SCRIPTS[step.scriptKey]; } } for(let obj of objectionsLibrary){ const replyDiv=document.getElementById(`reply_${obj.id}`); if(replyDiv) replyDiv.innerText=obj.reply; } qualificationFlags={"PPC/Ads":false,"SEO only":false,"Nothing/Unsure":false}; pinnedObjections.clear(); currentActiveCategory="PPC/Ads"; notesArray=[]; persistFullState(); renderNotesUI(); updatePinnedUI(); showToast('🏭 Factory reset'); createVersionSnapshot("Factory reset"); } }
     
-    // Real-time 12h clock with am/pm
     function updateClocks() {
         const now = new Date();
         const phtDate = new Date(now.getTime() + (8 * 60 * 60 * 1000));
