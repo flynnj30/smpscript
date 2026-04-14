@@ -695,12 +695,106 @@
             box-shadow: 0 0 8px rgba(0,255,255,0.3);
         }
 
-        @media (max-width: 800px) {
-            .sidebar { width: 280px; }
-            .clock-time { font-size: 1.2rem; }
-            .clock-group { gap: 12px; padding: 4px 16px; }
-            .logo-text { font-size: 0.9rem; }
-            .version-dropdown-content { min-width: 280px; right: -20px; }
+        /* Modal/Popup Styles for Dynamic Script Document */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-container {
+            background: #0f1825;
+            border: 1px solid #0ff;
+            border-radius: 2rem;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px rgba(0,255,255,0.3);
+            animation: modalGlow 0.3s ease;
+        }
+        @keyframes modalGlow {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(0,255,255,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #0a1020, transparent);
+        }
+        .modal-header h3 {
+            color: #0ff;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #0ff;
+            transition: 0.1s;
+            line-height: 1;
+        }
+        .modal-close:hover {
+            color: #ff44cc;
+            transform: scale(1.1);
+        }
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+            color: #c8d8ff;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            background: rgba(10,18,32,0.7);
+        }
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(0,255,255,0.2);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .copy-btn-modal {
+            background: rgba(0, 255, 255, 0.15);
+            border: 1px solid #0ff;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #0ff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .copy-btn-modal:hover {
+            background: #0ff;
+            color: #0a0f1a;
+            box-shadow: 0 0 12px #0ff;
+        }
+        @media (max-width: 600px) {
+            .modal-container { width: 95%; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800&display=swap" rel="stylesheet">
@@ -731,7 +825,6 @@
             <div class="logo-area">
                 <button class="menu-toggle" id="toggleSidebarBtn">☰</button>
                 <span class="logo-text">Seek Marketing · Flow Script Studio</span>
-                <!-- FUTURISTIC LARGE CLOCK -->
                 <div class="clock-group" id="liveClockWidget">
                     <div class="clock-item">
                         <span class="clock-label">🇵🇭 PHT</span>
@@ -744,24 +837,18 @@
                 </div>
             </div>
             <div class="action-buttons">
-                <!-- Save Version button -->
+                <!-- NEW: Extract Script as Document Button -->
+                <button class="icon-btn" id="extractScriptBtn" title="Extract calling script into document format">📄 Extract Script</button>
+                <!-- NEW: Popup Document with Copy/Paste -->
+                <button class="icon-btn" id="popupScriptBtn" title="Open dynamic script document with copy">📋 Open Script Doc</button>
                 <button class="icon-btn" id="saveVersionBtn">📸 Save Version</button>
-                <!-- HISTORY BUTTON - positioned right before Reset Factory -->
                 <div class="version-dropdown" id="versionDropdownContainer">
-                    <button class="version-dropdown-btn" id="versionDropdownBtn">
-                        📜 History ▼
-                    </button>
+                    <button class="version-dropdown-btn" id="versionDropdownBtn">📜 History ▼</button>
                     <div class="version-dropdown-content" id="versionDropdownContent">
-                        <div class="version-header-drop">
-                            <span>📜 Version History</span>
-                            <button id="clearVersionsDropdownBtn" class="clear-versions-drop" title="Clear all versions">🗑️ Clear All</button>
-                        </div>
-                        <div id="versionListDropdown" class="version-list-drop">
-                            <div style="text-align:center; padding:20px; color:#5a6e8c;">No versions yet</div>
-                        </div>
+                        <div class="version-header-drop"><span>📜 Version History</span><button id="clearVersionsDropdownBtn" class="clear-versions-drop">🗑️ Clear All</button></div>
+                        <div id="versionListDropdown" class="version-list-drop"><div style="text-align:center; padding:20px;">No versions yet</div></div>
                     </div>
                 </div>
-                <!-- Reset Factory button -->
                 <button class="icon-btn" id="globalResetBtn">⟳ Reset Factory</button>
             </div>
         </div>
@@ -777,8 +864,24 @@
 </div>
 <div id="toastMsg" class="toast-msg"></div>
 
+<!-- Modal Popup Structure for Dynamic Script Document -->
+<div id="scriptModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>📄 Cold Calling Script · Dynamic Document</h3>
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+        </div>
+        <div class="modal-body" id="modalScriptBody">
+            <!-- Script content will be injected here -->
+        </div>
+        <div class="modal-footer">
+            <button class="copy-btn-modal" id="copyScriptBtn">📋 Copy to Clipboard</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    // ======================= CORE SCRIPT LOGIC (unchanged behavior) =======================
+    // ======================= CORE SCRIPT LOGIC (unchanged behavior except new features) =======================
     const ORIGINAL_SCRIPTS = {
         hook: `Hi [Name], it’s Flynn from Seek Marketing Partners. I was having a nosey at your company profile and had a couple of quick questions… Do you have a minute?\n(Pause and listen — let them say yes/no.)\n\n"Awesome, I’ll keep it brief. I noticed a few high-impact opportunities where small tweaks could potentially improve your website traffic and ROI."`,
         qualify: `Just curious — are you currently doing anything online for marketing, like Google Ads, social media ads, or SEO?`,
@@ -812,43 +915,19 @@
     let versionHistory = [], notesArray = [];
 
     function showToast(msg) { const t=document.getElementById('toastMsg'); t.innerText=msg; t.style.opacity='1'; setTimeout(()=>t.style.opacity='0',2000); }
-    function persistFullState() {
-        const state = { scripts: {}, objections: {}, pinned: Array.from(pinnedObjections), qualificationFlags, currentActiveCategory, customValueScripts, versionHistory, notesArray };
+    function persistFullState() { /* unchanged */ const state = { scripts: {}, objections: {}, pinned: Array.from(pinnedObjections), qualificationFlags, currentActiveCategory, customValueScripts, versionHistory, notesArray };
         for (let step of stepsData) { const el = document.getElementById(`script_${step.key}`); if (el) state.scripts[step.key] = el.innerText; }
         for (let obj of objectionsLibrary) { const replyDiv = document.getElementById(`reply_${obj.id}`); if (replyDiv) state.objections[obj.id] = replyDiv.innerText; }
         localStorage.setItem('seekStudioProV3', JSON.stringify(state));
     }
-    function loadFullState() {
-        const raw = localStorage.getItem('seekStudioProV3');
-        if (!raw) return false;
-        try {
-            const data = JSON.parse(raw);
-            if (data.customValueScripts) customValueScripts = data.customValueScripts;
-            if (data.currentActiveCategory) currentActiveCategory = data.currentActiveCategory;
-            if (data.qualificationFlags) qualificationFlags = data.qualificationFlags;
-            if (data.pinned) pinnedObjections = new Set(data.pinned);
-            if (data.versionHistory) versionHistory = data.versionHistory;
-            if (data.notesArray) notesArray = data.notesArray; else notesArray = [];
-            if (data.scripts) for (let [key, txt] of Object.entries(data.scripts)) { const el = document.getElementById(`script_${key}`); if (el && txt) el.innerText = txt; }
-            const valueEl = document.getElementById(`script_value`);
-            if (valueEl && customValueScripts[currentActiveCategory]) valueEl.innerText = customValueScripts[currentActiveCategory];
-            if (data.objections) for (let [id, txt] of Object.entries(data.objections)) { const el = document.getElementById(`reply_${id}`); if (el && txt) el.innerText = txt; }
-            updatePinnedUI(); renderVersionHistoryDropdown(); renderNotesUI();
-            return true;
-        } catch(e) { return false; }
-    }
+    function loadFullState() { /* unchanged */ const raw = localStorage.getItem('seekStudioProV3'); if (!raw) return false;
+        try { const data = JSON.parse(raw); if (data.customValueScripts) customValueScripts = data.customValueScripts; if (data.currentActiveCategory) currentActiveCategory = data.currentActiveCategory; if (data.qualificationFlags) qualificationFlags = data.qualificationFlags; if (data.pinned) pinnedObjections = new Set(data.pinned); if (data.versionHistory) versionHistory = data.versionHistory; if (data.notesArray) notesArray = data.notesArray; else notesArray = []; if (data.scripts) for (let [key, txt] of Object.entries(data.scripts)) { const el = document.getElementById(`script_${key}`); if (el && txt) el.innerText = txt; } const valueEl = document.getElementById(`script_value`); if (valueEl && customValueScripts[currentActiveCategory]) valueEl.innerText = customValueScripts[currentActiveCategory]; if (data.objections) for (let [id, txt] of Object.entries(data.objections)) { const el = document.getElementById(`reply_${id}`); if (el && txt) el.innerText = txt; } updatePinnedUI(); renderVersionHistoryDropdown(); renderNotesUI(); return true; } catch(e) { return false; } }
     function updatePinnedUI() { document.querySelectorAll('.obj-card').forEach(card => { const id = card.dataset.objId; if (id && pinnedObjections.has(id)) card.classList.add('pinned'); else card.classList.remove('pinned'); }); }
-    function renderVersionHistoryDropdown() {
-        const c = document.getElementById('versionListDropdown'); if(!c) return;
-        if(!versionHistory.length){ c.innerHTML='<div style="text-align:center; padding:20px; color:#5a6e8c;">✨ No versions saved</div>'; return; }
-        c.innerHTML = versionHistory.map(v => `<div class="version-item-drop" data-version-id="${v.id}"><strong>🕒 ${v.timestamp}</strong><div>${v.description}</div></div>`).join('');
-        document.querySelectorAll('#versionListDropdown .version-item-drop').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); const id = parseInt(el.dataset.versionId); const ver = versionHistory.find(v=>v.id===id); if(ver) restoreSnapshot(ver); document.getElementById('versionDropdownContent')?.classList.remove('show'); }); });
-    }
+    function renderVersionHistoryDropdown() { const c = document.getElementById('versionListDropdown'); if(!c) return; if(!versionHistory.length){ c.innerHTML='<div style="text-align:center; padding:20px; color:#5a6e8c;">✨ No versions saved</div>'; return; } c.innerHTML = versionHistory.map(v => `<div class="version-item-drop" data-version-id="${v.id}"><strong>🕒 ${v.timestamp}</strong><div>${v.description}</div></div>`).join(''); document.querySelectorAll('#versionListDropdown .version-item-drop').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); const id = parseInt(el.dataset.versionId); const ver = versionHistory.find(v=>v.id===id); if(ver) restoreSnapshot(ver); document.getElementById('versionDropdownContent')?.classList.remove('show'); }); }); }
     function restoreSnapshot(version) { const snap=version.snapshot; if(snap.scripts) for(let [key,text] of Object.entries(snap.scripts)){ const el=document.getElementById(`script_${key}`); if(el) el.innerText=text; } if(snap.customValueScripts) customValueScripts=snap.customValueScripts; if(snap.qualificationFlags) qualificationFlags=snap.qualificationFlags; if(snap.currentActiveCategory) currentActiveCategory=snap.currentActiveCategory; if(snap.objections) for(let [id,text] of Object.entries(snap.objections)){ const el=document.getElementById(`reply_${id}`); if(el) el.innerText=text; } if(snap.notesArray) notesArray=snap.notesArray; const vb=document.getElementById(`script_value`); if(vb&&customValueScripts[currentActiveCategory]) vb.innerText=customValueScripts[currentActiveCategory]; updatePinnedUI(); renderNotesUI(); persistFullState(); showToast(`Restored ${version.timestamp}`); renderVersionHistoryDropdown(); }
     function createVersionSnapshot(desc) { const snapshot={scripts:{},customValueScripts:{...customValueScripts},qualificationFlags:{...qualificationFlags},currentActiveCategory,objections:{},notesArray:JSON.parse(JSON.stringify(notesArray))}; for(let step of stepsData){ const el=document.getElementById(`script_${step.key}`); if(el) snapshot.scripts[step.key]=el.innerText; } for(let obj of objectionsLibrary){ const replyDiv=document.getElementById(`reply_${obj.id}`); if(replyDiv) snapshot.objections[obj.id]=replyDiv.innerText; } versionHistory.unshift({id:Date.now(),timestamp:new Date().toLocaleString(),description:desc,snapshot}); if(versionHistory.length>30) versionHistory.pop(); persistFullState(); renderVersionHistoryDropdown(); showToast(`✅ ${desc}`); }
     
-    // Drag & drop and notes functions (original)
-    function initDragAndDropNotes() { const container=document.getElementById('notesListContainer'); if(!container) return; let dragSrc=null; container.addEventListener('dragstart',(e)=>{ const card=e.target.closest('.note-card'); if(!card) return; dragSrc=card; e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',card.dataset.noteId); card.classList.add('dragging'); }); container.addEventListener('dragend',(e)=>{ const card=e.target.closest('.note-card'); if(card) card.classList.remove('dragging'); dragSrc=null; }); container.addEventListener('dragover',(e)=>{ e.preventDefault(); e.dataTransfer.dropEffect='move'; }); container.addEventListener('drop',(e)=>{ e.preventDefault(); const targetCard=e.target.closest('.note-card'); if(!targetCard||!dragSrc||dragSrc===targetCard) return; const dragId=parseInt(dragSrc.dataset.noteId), targetId=parseInt(targetCard.dataset.noteId); const dragIndex=notesArray.findIndex(n=>n.id===dragId), targetIndex=notesArray.findIndex(n=>n.id===targetId); if(dragIndex===-1||targetIndex===-1) return; const [movedNote]=notesArray.splice(dragIndex,1); notesArray.splice(targetIndex,0,movedNote); persistFullState(); renderNotesUI(); showToast("📌 Note reordered"); createVersionSnapshot("Reordered note"); }); }
+    function initDragAndDropNotes() { /* unchanged from original */ const container=document.getElementById('notesListContainer'); if(!container) return; let dragSrc=null; container.addEventListener('dragstart',(e)=>{ const card=e.target.closest('.note-card'); if(!card) return; dragSrc=card; e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',card.dataset.noteId); card.classList.add('dragging'); }); container.addEventListener('dragend',(e)=>{ const card=e.target.closest('.note-card'); if(card) card.classList.remove('dragging'); dragSrc=null; }); container.addEventListener('dragover',(e)=>{ e.preventDefault(); e.dataTransfer.dropEffect='move'; }); container.addEventListener('drop',(e)=>{ e.preventDefault(); const targetCard=e.target.closest('.note-card'); if(!targetCard||!dragSrc||dragSrc===targetCard) return; const dragId=parseInt(dragSrc.dataset.noteId), targetId=parseInt(targetCard.dataset.noteId); const dragIndex=notesArray.findIndex(n=>n.id===dragId), targetIndex=notesArray.findIndex(n=>n.id===targetId); if(dragIndex===-1||targetIndex===-1) return; const [movedNote]=notesArray.splice(dragIndex,1); notesArray.splice(targetIndex,0,movedNote); persistFullState(); renderNotesUI(); showToast("📌 Note reordered"); createVersionSnapshot("Reordered note"); }); }
     function saveNote(noteId){ const note=notesArray.find(n=>n.id===noteId); if(!note) return; const titleInput=document.getElementById(`note-title-${noteId}`), contentDiv=document.getElementById(`note-content-${noteId}`); if(titleInput) note.title=titleInput.value.trim()||"Untitled Note"; if(contentDiv) note.content=contentDiv.innerText; persistFullState(); renderNotesUI(); showToast(`💾 Saved`); createVersionSnapshot(`Saved note`); }
     function deleteNote(noteId){ if(confirm("Delete permanently?")){ notesArray=notesArray.filter(n=>n.id!==noteId); persistFullState(); renderNotesUI(); showToast("🗑️ Deleted"); createVersionSnapshot("Deleted note"); } }
     function addNewNote(){ const newId=Date.now(); notesArray.unshift({id:newId,title:"New Script",content:"Paste or type script/note here. Double-click to edit."}); persistFullState(); renderNotesUI(); showToast("✏️ New note added"); createVersionSnapshot("Added note"); }
@@ -864,32 +943,76 @@
     function goToStep(index){ if(index<0) index=0; if(index>=stepsData.length) index=stepsData.length-1; currentStepIdx=index; flowStepsElements.forEach((el,i)=>{ if(i===currentStepIdx) el.classList.add('active'); else el.classList.remove('active'); }); }
     function resetToFactory(){ if(confirm("Reset all scripts & notes to factory?")){ for(let step of stepsData){ const el=document.getElementById(`script_${step.key}`); if(el){ if(step.key==='value'){ customValueScripts={"PPC/Ads":ORIGINAL_SCRIPTS.value_ppc,"SEO only":ORIGINAL_SCRIPTS.value_seo,"Nothing/Unsure":ORIGINAL_SCRIPTS.value_nothing}; el.innerText=customValueScripts[currentActiveCategory]; } else el.innerText=ORIGINAL_SCRIPTS[step.scriptKey]; } } for(let obj of objectionsLibrary){ const replyDiv=document.getElementById(`reply_${obj.id}`); if(replyDiv) replyDiv.innerText=obj.reply; } qualificationFlags={"PPC/Ads":false,"SEO only":false,"Nothing/Unsure":false}; pinnedObjections.clear(); currentActiveCategory="PPC/Ads"; notesArray=[]; persistFullState(); renderNotesUI(); updatePinnedUI(); showToast('🏭 Factory reset'); createVersionSnapshot("Factory reset"); } }
     
-    function updateClocks() {
-        const now = new Date();
-        const phtDate = new Date(now.getTime() + (8 * 60 * 60 * 1000));
-        let phtHours = phtDate.getUTCHours();
-        let phtMinutes = phtDate.getUTCMinutes();
-        let phtSeconds = phtDate.getUTCSeconds();
-        let phtAmpm = phtHours >= 12 ? 'PM' : 'AM';
-        phtHours = phtHours % 12 || 12;
-        const phtTimeStr = `${phtHours.toString().padStart(2,'0')}:${phtMinutes.toString().padStart(2,'0')}:${phtSeconds.toString().padStart(2,'0')}`;
-        document.getElementById('phtTime').innerText = phtTimeStr;
-        document.getElementById('phtAmpm').innerText = phtAmpm;
-        
-        const ukDate = new Date(now.toLocaleString("en-US", {timeZone: "Europe/London"}));
-        let ukHours = ukDate.getHours();
-        let ukMinutes = ukDate.getMinutes();
-        let ukSeconds = ukDate.getSeconds();
-        let ukAmpm = ukHours >= 12 ? 'PM' : 'AM';
-        ukHours = ukHours % 12 || 12;
-        const ukTimeStr = `${ukHours.toString().padStart(2,'0')}:${ukMinutes.toString().padStart(2,'0')}:${ukSeconds.toString().padStart(2,'0')}`;
-        document.getElementById('ukTime').innerText = ukTimeStr;
-        document.getElementById('ukAmpm').innerText = ukAmpm;
+    function updateClocks() { /* unchanged */ const now = new Date(); const phtDate = new Date(now.getTime() + (8 * 60 * 60 * 1000)); let phtHours = phtDate.getUTCHours(); let phtMinutes = phtDate.getUTCMinutes(); let phtSeconds = phtDate.getUTCSeconds(); let phtAmpm = phtHours >= 12 ? 'PM' : 'AM'; phtHours = phtHours % 12 || 12; const phtTimeStr = `${phtHours.toString().padStart(2,'0')}:${phtMinutes.toString().padStart(2,'0')}:${phtSeconds.toString().padStart(2,'0')}`; document.getElementById('phtTime').innerText = phtTimeStr; document.getElementById('phtAmpm').innerText = phtAmpm; const ukDate = new Date(now.toLocaleString("en-US", {timeZone: "Europe/London"})); let ukHours = ukDate.getHours(); let ukMinutes = ukDate.getMinutes(); let ukSeconds = ukDate.getSeconds(); let ukAmpm = ukHours >= 12 ? 'PM' : 'AM'; ukHours = ukHours % 12 || 12; const ukTimeStr = `${ukHours.toString().padStart(2,'0')}:${ukMinutes.toString().padStart(2,'0')}:${ukSeconds.toString().padStart(2,'0')}`; document.getElementById('ukTime').innerText = ukTimeStr; document.getElementById('ukAmpm').innerText = ukAmpm; }
+    
+    // Helper: Build full script text from current editable steps
+    function getCurrentCallingScript() {
+        const hook = document.getElementById('script_hook')?.innerText || "";
+        const qualify = document.getElementById('script_qualify')?.innerText || "";
+        const value = document.getElementById('script_value')?.innerText || "";
+        const close = document.getElementById('script_close')?.innerText || "";
+        return `📞 COLD CALLING SCRIPT\n\n🔹 OPENING / HOOK:\n${hook}\n\n🔹 QUALIFICATION:\n${qualify}\n\n🔹 VALUE PROPOSITION (${currentActiveCategory}):\n${value}\n\n🔹 SOFT CLOSE:\n${close}\n\n--- Generated from Seek Marketing Flow Studio ---`;
     }
-    setInterval(updateClocks, 1000);
-    updateClocks();
-
-    function init(){ renderFlow(); renderSidebar(); loadFullState(); goToStep(0); document.getElementById('toggleSidebarBtn').addEventListener('click',()=>{ document.getElementById('sidebar').classList.toggle('collapsed'); }); document.getElementById('prevStepBtn').addEventListener('click',()=>goToStep(currentStepIdx-1)); document.getElementById('nextStepBtn').addEventListener('click',()=>goToStep(currentStepIdx+1)); document.getElementById('saveVersionBtn').addEventListener('click',()=>createVersionSnapshot("Manual snapshot")); document.getElementById('globalResetBtn').addEventListener('click',resetToFactory); document.getElementById('addNoteBtn').addEventListener('click',addNewNote); const dropdownBtn=document.getElementById('versionDropdownBtn'); const dropdownContent=document.getElementById('versionDropdownContent'); dropdownBtn.addEventListener('click',(e)=>{ e.stopPropagation(); dropdownContent.classList.toggle('show'); }); document.addEventListener('click',(e)=>{ if(!dropdownBtn.contains(e.target)&&!dropdownContent.contains(e.target)) dropdownContent.classList.remove('show'); }); const clearDropdown=document.getElementById('clearVersionsDropdownBtn'); if(clearDropdown) clearDropdown.addEventListener('click',(e)=>{ e.stopPropagation(); if(confirm("Clear all versions?")){ versionHistory=[]; persistFullState(); renderVersionHistoryDropdown(); showToast("Versions cleared"); dropdownContent.classList.remove('show'); } }); window.addEventListener('beforeunload',()=>persistFullState()); }
+    
+    // Extract to document: download as .txt
+    function extractScriptAsDocument() {
+        const fullScript = getCurrentCallingScript();
+        const blob = new Blob([fullScript], {type: "text/plain"});
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = `calling_script_${new Date().toISOString().slice(0,19)}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast("📄 Script extracted as document!");
+        createVersionSnapshot("Extracted script document");
+    }
+    
+    // Open modal with dynamic script and copy/paste
+    function openScriptPopup() {
+        const modal = document.getElementById('scriptModal');
+        const bodyDiv = document.getElementById('modalScriptBody');
+        if(bodyDiv) {
+            bodyDiv.innerText = getCurrentCallingScript();
+        }
+        modal.classList.add('active');
+    }
+    
+    function closeModal() {
+        document.getElementById('scriptModal').classList.remove('active');
+    }
+    
+    function copyScriptToClipboard() {
+        const scriptText = document.getElementById('modalScriptBody')?.innerText || "";
+        navigator.clipboard.writeText(scriptText).then(() => {
+            showToast("📋 Script copied to clipboard!");
+        }).catch(() => showToast("❌ Copy failed"));
+    }
+    
+    function init() { 
+        renderFlow(); renderSidebar(); loadFullState(); goToStep(0); 
+        document.getElementById('toggleSidebarBtn').addEventListener('click',()=>{ document.getElementById('sidebar').classList.toggle('collapsed'); });
+        document.getElementById('prevStepBtn').addEventListener('click',()=>goToStep(currentStepIdx-1));
+        document.getElementById('nextStepBtn').addEventListener('click',()=>goToStep(currentStepIdx+1));
+        document.getElementById('saveVersionBtn').addEventListener('click',()=>createVersionSnapshot("Manual snapshot"));
+        document.getElementById('globalResetBtn').addEventListener('click',resetToFactory);
+        document.getElementById('addNoteBtn').addEventListener('click',addNewNote);
+        const dropdownBtn=document.getElementById('versionDropdownBtn'); const dropdownContent=document.getElementById('versionDropdownContent');
+        dropdownBtn.addEventListener('click',(e)=>{ e.stopPropagation(); dropdownContent.classList.toggle('show'); });
+        document.addEventListener('click',(e)=>{ if(!dropdownBtn.contains(e.target)&&!dropdownContent.contains(e.target)) dropdownContent.classList.remove('show'); });
+        const clearDropdown=document.getElementById('clearVersionsDropdownBtn'); if(clearDropdown) clearDropdown.addEventListener('click',(e)=>{ e.stopPropagation(); if(confirm("Clear all versions?")){ versionHistory=[]; persistFullState(); renderVersionHistoryDropdown(); showToast("Versions cleared"); dropdownContent.classList.remove('show'); } });
+        window.addEventListener('beforeunload',()=>persistFullState());
+        
+        // New feature listeners
+        document.getElementById('extractScriptBtn').addEventListener('click', extractScriptAsDocument);
+        document.getElementById('popupScriptBtn').addEventListener('click', openScriptPopup);
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        document.getElementById('copyScriptBtn').addEventListener('click', copyScriptToClipboard);
+        document.getElementById('scriptModal').addEventListener('click', (e) => { if(e.target === document.getElementById('scriptModal')) closeModal(); });
+        setInterval(updateClocks, 1000); updateClocks();
+    }
     init();
 </script>
 </body>
